@@ -1,6 +1,6 @@
 import authService from './authService';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+const API_URL = process.env.REACT_APP_API_URL;
 
 class ApiService {
   async get<T>(endpoint: string): Promise<T> {
