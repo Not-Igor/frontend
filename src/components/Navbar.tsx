@@ -38,6 +38,16 @@ const Navbar: React.FC = () => {
                   Home
                 </button>
                 <button
+                  onClick={() => navigate('/profile')}
+                  className={`px-3 py-2 rounded-md text-sm font-medium ${
+                    location.pathname === '/profile'
+                      ? 'text-indigo-600'
+                      : 'text-gray-700 hover:text-indigo-600'
+                  }`}
+                >
+                  Profiel
+                </button>
+                <button
                   onClick={handleLogout}
                   className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
                 >
