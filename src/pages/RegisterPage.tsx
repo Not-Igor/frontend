@@ -10,9 +10,16 @@ const RegisterPage: React.FC = () => {
   const handleRegister = async (username: string, password: string, email: string) => {
     try {
       setError('');
+      // Register the user
       await authService.register(username, password, email);
       console.log('Registratie succesvol!');
-      navigate('/login');
+      
+      // Automatically login after successful registration
+      await authService.login(username, password);
+      console.log('Automatisch ingelogd!');
+      
+      // Navigate to home page
+      navigate('/home');
     } catch (error: any) {
       console.error('Register error:', error);
       setError(error.message || 'Er is een fout opgetreden bij het registreren.');
