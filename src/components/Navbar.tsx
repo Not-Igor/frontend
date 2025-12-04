@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import authService from '../services/authService';
 import friendService from '../services/friendService';
 import { friendRequestEvents, FRIEND_REQUEST_UPDATED } from '../utils/events';
@@ -7,6 +8,7 @@ import { friendRequestEvents, FRIEND_REQUEST_UPDATED } from '../utils/events';
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
   const isAuthenticated = authService.isAuthenticated();
   const [friendRequestCount, setFriendRequestCount] = useState<number>(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
@@ -60,7 +62,7 @@ const Navbar: React.FC = () => {
               className="text-xl font-bold text-gray-800 cursor-pointer hover:text-indigo-600 transition-colors"
               onClick={() => handleNavigate('/home')}
             >
-              KompApp
+              {t('app.name')}
             </h1>
           </div>
 
@@ -76,7 +78,7 @@ const Navbar: React.FC = () => {
                       : 'text-gray-700 hover:text-indigo-600'
                   }`}
                 >
-                  Home
+                  {t('nav.home')}
                 </button>
                 <button
                   onClick={() => navigate('/profile')}
@@ -86,7 +88,7 @@ const Navbar: React.FC = () => {
                       : 'text-gray-700 hover:text-indigo-600'
                   }`}
                 >
-                  Profiel
+                  {t('nav.profile')}
                 </button>
                 <button
                   onClick={() => navigate('/friends')}
@@ -96,7 +98,7 @@ const Navbar: React.FC = () => {
                       : 'text-gray-700 hover:text-indigo-600'
                   }`}
                 >
-                  Vrienden
+                  {t('nav.friends')}
                   {friendRequestCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                       {friendRequestCount}
@@ -107,7 +109,7 @@ const Navbar: React.FC = () => {
                   onClick={handleLogout}
                   className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Uitloggen
+                  {t('nav.logout')}
                 </button>
               </>
             ) : (
@@ -120,7 +122,7 @@ const Navbar: React.FC = () => {
                       : 'text-gray-700 hover:text-indigo-600'
                   }`}
                 >
-                  Inloggen
+                  {t('auth.login.title')}
                 </button>
                 <button
                   onClick={() => navigate('/register')}
@@ -130,7 +132,7 @@ const Navbar: React.FC = () => {
                       : 'text-gray-700 hover:text-indigo-600'
                   }`}
                 >
-                  Registreren
+                  {t('auth.register.title')}
                 </button>
               </>
             )}
@@ -172,7 +174,7 @@ const Navbar: React.FC = () => {
                       : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600'
                   }`}
                 >
-                  Home
+                  {t('nav.home')}
                 </button>
                 <button
                   onClick={() => handleNavigate('/profile')}
@@ -182,7 +184,7 @@ const Navbar: React.FC = () => {
                       : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600'
                   }`}
                 >
-                  Profiel
+                  {t('nav.profile')}
                 </button>
                 <button
                   onClick={() => handleNavigate('/friends')}
@@ -193,7 +195,7 @@ const Navbar: React.FC = () => {
                   }`}
                 >
                   <span className="flex items-center justify-between">
-                    Vrienden
+                    {t('nav.friends')}
                     {friendRequestCount > 0 && (
                       <span className="bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                         {friendRequestCount}
@@ -205,7 +207,7 @@ const Navbar: React.FC = () => {
                   onClick={handleLogout}
                   className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
                 >
-                  Uitloggen
+                  {t('nav.logout')}
                 </button>
               </>
             ) : (
@@ -218,7 +220,7 @@ const Navbar: React.FC = () => {
                       : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600'
                   }`}
                 >
-                  Inloggen
+                  {t('auth.login.title')}
                 </button>
                 <button
                   onClick={() => handleNavigate('/register')}
@@ -228,7 +230,7 @@ const Navbar: React.FC = () => {
                       : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600'
                   }`}
                 >
-                  Registreren
+                  {t('auth.register.title')}
                 </button>
               </>
             )}

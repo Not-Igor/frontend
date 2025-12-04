@@ -1,0 +1,86 @@
+{
+  "app": {
+    "name": "KompApp",
+    "welcome": "Welcome"
+  },
+  "nav": {
+    "home": "Home",
+    "friends": "Friends",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "username": "Username",
+      "password": "Password",
+      "button": "Login",
+      "error": "Login failed",
+      "success": "Login successful!",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Register here"
+    },
+    "register": {
+      "title": "Register",
+      "username": "Username",
+      "email": "Email",
+      "password": "Password",
+      "button": "Register",
+      "error": "Registration failed",
+      "success": "Registration successful!",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Login here"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "username": "Username",
+    "email": "Email",
+    "role": "Role",
+    "language": {
+      "title": "Language",
+      "select": "Select Language"
+    }
+  },
+  "friends": {
+    "title": "Friends",
+    "myFriends": "My Friends",
+    "friendsCount": "{{count}} friend",
+    "friendsCount_plural": "{{count}} friends",
+    "searchUsers": "Search Users",
+    "searchPlaceholder": "Type to search (min. 2 letters)...",
+    "searching": "Searching...",
+    "noResults": "No users found",
+    "sendRequest": "Send Friend Request",
+    "requestSent": "Friend request sent!",
+    "requests": {
+      "title": "Friend Requests",
+      "pending": "Pending Requests",
+      "accept": "Accept",
+      "reject": "Reject",
+      "noRequests": "No pending requests"
+    },
+    "list": {
+      "empty": "You don't have any friends yet",
+      "loading": "Loading friends..."
+    }
+  },
+  "home": {
+    "welcome": "Welcome, {{username}}!",
+    "greeting": "Welcome to KompApp"
+  },
+  "language": {
+    "en": "English",
+    "nl": "Nederlands"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success!",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close"
+  }
+}

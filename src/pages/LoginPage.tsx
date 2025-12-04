@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import LoginForm from '../components/LoginForm';
 import authService from '../services/authService';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [error, setError] = useState<string>('');
 
   const handleLogin = async (username: string, password: string) => {
     try {
       setError('');
       const data = await authService.login(username, password);
-      console.log('Login succesvol!', data);
+      console.log(t('auth.login.success'), data);
       navigate('/home');
     } catch (error: any) {
       console.error('Login error:', error);
-      setError(error.message || 'Er is een fout opgetreden bij het inloggen.');
-      alert(error.message || 'Login mislukt. Controleer je gegevens.');
+      setError(error.message || t('auth.login.error'));
+      alert(error.message || t('auth.login.error'));
     }
   };
 
