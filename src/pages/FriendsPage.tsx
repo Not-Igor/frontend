@@ -4,11 +4,11 @@ import Navbar from '../components/Navbar';
 import UserSearchBar from '../components/UserSearchBar';
 import UserSearchResult from '../components/UserSearchResult';
 import FriendRequestList from '../components/FriendRequestList';
-import friendService, { UserSearchResult, FriendRequest } from '../services/friendService';
+import friendService, { UserSearchResult as UserSearchResultType, FriendRequest } from '../services/friendService';
 
 const FriendsPage: React.FC = () => {
   const navigate = useNavigate();
-  const [searchResult, setSearchResult] = useState<UserSearchResult | null>(null);
+  const [searchResult, setSearchResult] = useState<UserSearchResultType | null>(null);
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isSending, setIsSending] = useState(false);
@@ -25,6 +25,7 @@ const FriendsPage: React.FC = () => {
       return;
     }
     loadFriendRequests();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, navigate]);
 
   const loadFriendRequests = async () => {
