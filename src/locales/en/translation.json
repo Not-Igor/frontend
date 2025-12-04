@@ -25,11 +25,14 @@
       "username": "Username",
       "email": "Email",
       "password": "Password",
+      "confirmPassword": "Confirm Password",
       "button": "Register",
       "error": "Registration failed",
       "success": "Registration successful!",
       "hasAccount": "Already have an account?",
-      "loginLink": "Login here"
+      "loginLink": "Login here",
+      "passwordMismatch": "Passwords do not match",
+      "passwordTooShort": "Password must be at least 6 characters"
     }
   },
   "profile": {
