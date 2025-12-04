@@ -11,23 +11,16 @@ const UserSearchDropdown: React.FC<UserSearchDropdownProps> = ({ users, onSelect
     return null;
   }
 
-  const handleSelectUser = (e: React.MouseEvent, user: UserSearchResult) => {
-    e.preventDefault();
-    onSelectUser(user);
-  };
-
   return (
-    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-64 overflow-y-auto">
+    <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-64 overflow-y-auto">
       {users.map((user) => {
         const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username}`;
         
         return (
-          <button
+          <div
             key={user.id}
-            onMouseDown={(e) => handleSelectUser(e, user)}
-            type="button"
-            tabIndex={-1}
-            className="w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors text-left border-b border-gray-100 last:border-b-0"
+            onClick={() => onSelectUser(user)}
+            className="px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-b-0"
           >
             <img
               src={avatarUrl}
@@ -38,7 +31,7 @@ const UserSearchDropdown: React.FC<UserSearchDropdownProps> = ({ users, onSelect
               <p className="font-medium text-gray-900 truncate">{user.username}</p>
               <p className="text-sm text-gray-500 truncate">{user.email}</p>
             </div>
-          </button>
+          </div>
         );
       })}
     </div>

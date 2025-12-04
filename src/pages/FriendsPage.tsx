@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserSearchBar from '../components/UserSearchBar';
 import UserSearchResult from '../components/UserSearchResult';
@@ -16,6 +16,7 @@ interface Friend {
 
 const FriendsPage: React.FC = () => {
   const navigate = useNavigate();
+  const searchContainerRef = useRef<HTMLDivElement>(null);
   const [searchResults, setSearchResults] = useState<UserSearchResultType[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserSearchResultType | null>(null);
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
@@ -98,6 +99,20 @@ const FriendsPage: React.FC = () => {
     setSearchResults([]);
   };
 
+  // Close dropdown when clicking outside - just like MovieSearchBar
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setSearchResults([]);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handleSendRequest = async (receiverUsername: string) => {
     const user = authService.getUser();
     if (!user) return;
@@ -165,7 +180,7 @@ const FriendsPage: React.FC = () => {
         {/* Search Section */}
         <div className="mb-12">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Zoek gebruikers</h2>
-          <div className="relative">
+          <div ref={searchContainerRef}>
             <UserSearchBar onSearch={handleSearch} isLoading={isSearching} />
             <UserSearchDropdown users={searchResults} onSelectUser={handleSelectUser} />
           </div>
