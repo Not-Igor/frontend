@@ -3,17 +3,25 @@ import { useNavigate } from 'react-router-dom';
 import UserSearchBar from '../components/UserSearchBar';
 import UserSearchResult from '../components/UserSearchResult';
 import FriendRequestList from '../components/FriendRequestList';
+import FriendsList from '../components/FriendsList';
 import authService from '../services/authService';
 import friendService, { UserSearchResult as UserSearchResultType, FriendRequest } from '../services/friendService';
 import { friendRequestEvents, FRIEND_REQUEST_UPDATED } from '../utils/events';
+
+interface Friend {
+  id: number;
+  username: string;
+}
 
 const FriendsPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchResult, setSearchResult] = useState<UserSearchResultType | null>(null);
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
+  const [friends, setFriends] = useState<Friend[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isResponding, setIsResponding] = useState(false);
+  const [isLoadingFriends, setIsLoadingFriends] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -23,6 +31,7 @@ const FriendsPage: React.FC = () => {
       return;
     }
     loadFriendRequests();
+    loadFriends();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
@@ -35,6 +44,21 @@ const FriendsPage: React.FC = () => {
       setFriendRequests(requests);
     } catch (err) {
       console.error('Failed to load friend requests:', err);
+    }
+  };
+
+  const loadFriends = async () => {
+    const user = authService.getUser();
+    if (!user) return;
+    
+    setIsLoadingFriends(true);
+    try {
+      const friendsList = await friendService.getFriends(user.id);
+      setFriends(friendsList);
+    } catch (err) {
+      console.error('Failed to load friends:', err);
+    } finally {
+      setIsLoadingFriends(false);
     }
   };
 
@@ -92,6 +116,10 @@ const FriendsPage: React.FC = () => {
       await friendService.respondToRequest(requestId, accepted);
       setSuccessMessage(accepted ? 'Vriendschapsverzoek geaccepteerd!' : 'Vriendschapsverzoek geweigerd');
       await loadFriendRequests();
+      // Reload friends list if accepted
+      if (accepted) {
+        await loadFriends();
+      }
       // Notify navbar to update badge count
       friendRequestEvents.emit(FRIEND_REQUEST_UPDATED);
     } catch (err: any) {
@@ -117,6 +145,12 @@ const FriendsPage: React.FC = () => {
             {successMessage}
           </div>
         )}
+
+        {/* Friends List Section */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Mijn vrienden</h2>
+          <FriendsList friends={friends} isLoading={isLoadingFriends} />
+        </div>
 
         {/* Search Section */}
         <div className="mb-12">
