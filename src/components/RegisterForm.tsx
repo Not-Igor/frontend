@@ -3,14 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface RegisterFormProps {
-  onSubmit: (username: string, password: string, email: string) => void;
+  onSubmit: (username: string, password: string) => void;
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -29,7 +28,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
     }
 
     setError('');
-    onSubmit(username, password, email);
+    onSubmit(username, password);
   };
 
   return (
@@ -61,22 +60,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
                 onChange={(e) => setUsername(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder={t('auth.register.username')}
-              />
-            </div>
-            <div>
-              <label htmlFor="email-address" className="sr-only">
-                {t('auth.register.email')}
-              </label>
-              <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder={t('auth.register.email')}
               />
             </div>
             <div>
