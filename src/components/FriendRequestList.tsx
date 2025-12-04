@@ -22,7 +22,7 @@ const FriendRequestList: React.FC<FriendRequestListProps> = ({ requests, onRespo
         const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${request.senderUsername}`;
         
         return (
-          <div key={request.id} className="bg-white rounded-lg shadow-md p-4">
+          <div key={request.requestId} className="bg-white rounded-lg shadow-md p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <img
@@ -37,14 +37,14 @@ const FriendRequestList: React.FC<FriendRequestListProps> = ({ requests, onRespo
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => onRespond(request.id, true)}
+                  onClick={() => onRespond(request.requestId, true)}
                   disabled={isResponding}
                   className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
                 >
                   Accepteren
                 </button>
                 <button
-                  onClick={() => onRespond(request.id, false)}
+                  onClick={() => onRespond(request.requestId, false)}
                   disabled={isResponding}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
                 >

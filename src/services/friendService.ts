@@ -8,7 +8,7 @@ export interface UserSearchResult {
 }
 
 export interface FriendRequest {
-  id: number;
+  requestId: number;
   senderUsername: string;
 }
 
