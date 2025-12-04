@@ -7,20 +7,31 @@ interface UserSearchBarProps {
 
 const UserSearchBar: React.FC<UserSearchBarProps> = ({ onSearch, isLoading }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const previousSearchRef = useRef<string>('');
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
   }, []);
 
-  // Debounce effect - just like MovieSearchBar
+  // Debounce effect - only search if value actually changed
   useEffect(() => {
-    if (searchTerm.trim().length < 2) {
+    const trimmedSearch = searchTerm.trim();
+    
+    // Don't search if less than 2 characters
+    if (trimmedSearch.length < 2) {
+      previousSearchRef.current = '';
+      return;
+    }
+
+    // Don't search if the value hasn't changed
+    if (trimmedSearch === previousSearchRef.current) {
       return;
     }
 
     const handler = setTimeout(() => {
-      onSearch(searchTerm.trim());
+      previousSearchRef.current = trimmedSearch;
+      onSearch(trimmedSearch);
     }, 500);
 
     return () => {
