@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
+import FriendsPage from './pages/FriendsPage';
 import Navbar from './components/Navbar';
 import authService from './services/authService';
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/friends" element={<FriendsPage />} />
         </Routes>
       </div>
     </Router>
