@@ -17,7 +17,6 @@ export interface LoginRequest {
 export interface RegisterRequest {
   username: string;
   password: string;
-  email: string;
 }
 
 class AuthService {
@@ -45,13 +44,13 @@ class AuthService {
     return data;
   }
 
-  async register(username: string, password: string, email: string): Promise<any> {
+  async register(username: string, password: string): Promise<any> {
     const response = await fetch(`${API_URL}/users/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, password, email }),
+      body: JSON.stringify({ username, password }),
     });
 
     if (!response.ok) {

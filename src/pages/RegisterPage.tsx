@@ -7,11 +7,11 @@ const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string>('');
 
-  const handleRegister = async (username: string, password: string, email: string) => {
+  const handleRegister = async (username: string, password: string) => {
     try {
       setError('');
       // Register the user
-      await authService.register(username, password, email);
+      await authService.register(username, password);
       console.log('Registratie succesvol!');
       
       // Automatically login after successful registration
