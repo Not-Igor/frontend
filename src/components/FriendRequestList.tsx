@@ -23,32 +23,51 @@ const FriendRequestList: React.FC<FriendRequestListProps> = ({ requests, onRespo
         
         return (
           <div key={request.requestId} className="bg-white rounded-lg shadow-md p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
                 <img
                   src={avatarUrl}
                   alt={request.senderUsername}
-                  className="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full flex-shrink-0"
                 />
-                <div>
-                  <p className="font-medium text-gray-800">{request.senderUsername}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-gray-800 truncate">{request.senderUsername}</p>
                   <p className="text-sm text-gray-500">wil vrienden worden</p>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-shrink-0">
+                {/* Accept button */}
                 <button
                   onClick={() => onRespond(request.requestId, true)}
                   disabled={isResponding}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 sm:px-4 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                  title="Accepteren"
                 >
-                  Accepteren
+                  {/* Mobile: Icon only */}
+                  <span className="sm:hidden">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </span>
+                  {/* Desktop: Full text */}
+                  <span className="hidden sm:inline">Accepteren</span>
                 </button>
+                
+                {/* Reject button */}
                 <button
                   onClick={() => onRespond(request.requestId, false)}
                   disabled={isResponding}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 sm:px-4 sm:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                  title="Weigeren"
                 >
-                  Weigeren
+                  {/* Mobile: Icon only */}
+                  <span className="sm:hidden">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </span>
+                  {/* Desktop: Full text */}
+                  <span className="hidden sm:inline">Weigeren</span>
                 </button>
               </div>
             </div>
