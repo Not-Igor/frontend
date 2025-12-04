@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
 import UserSearchBar from '../components/UserSearchBar';
 import UserSearchResult from '../components/UserSearchResult';
 import FriendRequestList from '../components/FriendRequestList';
@@ -101,7 +100,6 @@ const FriendsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       <div className="max-w-4xl mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-8">Vrienden</h1>
 
