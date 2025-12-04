@@ -28,7 +28,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUs
       const user = authService.getUser();
       if (!user) return;
 
-      const friendsList = await apiService.get<any[]>(`/friends/${user.id}`);
+      const friendsList = await apiService.get<any[]>(`/users/friends/${user.id}`);
       
       // Map friend DTOs to User objects
       const friendUsers: User[] = friendsList.map(friend => ({
