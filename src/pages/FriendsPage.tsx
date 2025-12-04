@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import UserSearchBar from '../components/UserSearchBar';
 import UserSearchResult from '../components/UserSearchResult';
 import FriendRequestList from '../components/FriendRequestList';
+import authService from '../services/authService';
 import friendService, { UserSearchResult as UserSearchResultType, FriendRequest } from '../services/friendService';
 
 const FriendsPage: React.FC = () => {
@@ -16,23 +17,21 @@ const FriendsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const userId = localStorage.getItem('userId');
-  const username = localStorage.getItem('username');
-
   useEffect(() => {
-    if (!userId) {
+    if (!authService.isAuthenticated()) {
       navigate('/login');
       return;
     }
     loadFriendRequests();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, navigate]);
+  }, [navigate]);
 
   const loadFriendRequests = async () => {
-    if (!userId) return;
+    const user = authService.getUser();
+    if (!user) return;
     
     try {
-      const requests = await friendService.getReceivedRequests(parseInt(userId));
+      const requests = await friendService.getReceivedRequests(user.id);
       setFriendRequests(requests);
     } catch (err) {
       console.error('Failed to load friend requests:', err);
@@ -40,21 +39,24 @@ const FriendsPage: React.FC = () => {
   };
 
   const handleSearch = async (searchUsername: string) => {
+    const user = authService.getUser();
+    if (!user) return;
+
     setIsSearching(true);
     setError(null);
     setSuccessMessage(null);
     setSearchResult(null);
 
     try {
-      const user = await friendService.searchUser(searchUsername);
+      const foundUser = await friendService.searchUser(searchUsername);
       
       // Check if searching for self
-      if (user.username === username) {
+      if (foundUser.username === user.username) {
         setError('Je kunt geen vriendschapsverzoek naar jezelf sturen');
         return;
       }
       
-      setSearchResult(user);
+      setSearchResult(foundUser);
     } catch (err: any) {
       setError(err.message || 'Gebruiker niet gevonden');
     } finally {
@@ -63,14 +65,15 @@ const FriendsPage: React.FC = () => {
   };
 
   const handleSendRequest = async (receiverUsername: string) => {
-    if (!userId) return;
+    const user = authService.getUser();
+    if (!user) return;
 
     setIsSending(true);
     setError(null);
     setSuccessMessage(null);
 
     try {
-      await friendService.sendFriendRequest(parseInt(userId), receiverUsername);
+      await friendService.sendFriendRequest(user.id, receiverUsername);
       setSuccessMessage('Vriendschapsverzoek succesvol verzonden!');
       setSearchResult(null);
     } catch (err: any) {
