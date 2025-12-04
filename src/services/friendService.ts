@@ -13,7 +13,7 @@ export interface FriendRequest {
 }
 
 const friendService = {
-  searchUser: async (username: string): Promise<UserSearchResult> => {
+  searchUser: async (username: string): Promise<UserSearchResult[]> => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/users/search?username=${encodeURIComponent(username)}`, {
       method: 'GET',
@@ -25,9 +25,9 @@ const friendService = {
 
     if (!response.ok) {
       if (response.status === 404) {
-        throw new Error('User not found');
+        throw new Error('No users found');
       }
-      throw new Error('Failed to search user');
+      throw new Error('Failed to search users');
     }
 
     return response.json();

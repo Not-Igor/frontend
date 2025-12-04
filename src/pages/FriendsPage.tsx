@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserSearchBar from '../components/UserSearchBar';
 import UserSearchResult from '../components/UserSearchResult';
+import UserSearchDropdown from '../components/UserSearchDropdown';
 import FriendRequestList from '../components/FriendRequestList';
 import FriendsList from '../components/FriendsList';
 import authService from '../services/authService';
@@ -15,7 +16,9 @@ interface Friend {
 
 const FriendsPage: React.FC = () => {
   const navigate = useNavigate();
-  const [searchResult, setSearchResult] = useState<UserSearchResultType | null>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const [searchResults, setSearchResults] = useState<UserSearchResultType[]>([]);
+  const [selectedUser, setSelectedUser] = useState<UserSearchResultType | null>(null);
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
   const [friends, setFriends] = useState<Friend[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -69,24 +72,46 @@ const FriendsPage: React.FC = () => {
     setIsSearching(true);
     setError(null);
     setSuccessMessage(null);
-    setSearchResult(null);
+    setSearchResults([]);
+    setSelectedUser(null);
 
     try {
-      const foundUser = await friendService.searchUser(searchUsername);
+      const foundUsers = await friendService.searchUser(searchUsername);
       
-      // Check if searching for self
-      if (foundUser.username === user.username) {
-        setError('Je kunt geen vriendschapsverzoek naar jezelf sturen');
+      // Filter out self from results
+      const filteredUsers = foundUsers.filter(u => u.username !== user.username);
+      
+      if (filteredUsers.length === 0) {
+        setError('Geen gebruikers gevonden');
         return;
       }
       
-      setSearchResult(foundUser);
+      setSearchResults(filteredUsers);
     } catch (err: any) {
-      setError(err.message || 'Gebruiker niet gevonden');
+      setError(err.message || 'Geen gebruikers gevonden');
     } finally {
       setIsSearching(false);
     }
   };
+
+  const handleSelectUser = (user: UserSearchResultType) => {
+    setSelectedUser(user);
+    setSearchResults([]);
+  };
+
+  // Close dropdown when clicking outside - just like MovieSearchBar
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setSearchResults([]);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSendRequest = async (receiverUsername: string) => {
     const user = authService.getUser();
@@ -99,7 +124,7 @@ const FriendsPage: React.FC = () => {
     try {
       await friendService.sendFriendRequest(user.id, receiverUsername);
       setSuccessMessage('Vriendschapsverzoek succesvol verzonden!');
-      setSearchResult(null);
+      setSelectedUser(null);
     } catch (err: any) {
       setError(err.message || 'Kon vriendschapsverzoek niet verzenden');
     } finally {
@@ -155,11 +180,14 @@ const FriendsPage: React.FC = () => {
         {/* Search Section */}
         <div className="mb-12">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Zoek gebruikers</h2>
-          <UserSearchBar onSearch={handleSearch} isLoading={isSearching} />
+          <div ref={searchContainerRef} className="relative">
+            <UserSearchBar onSearch={handleSearch} isLoading={isSearching} />
+            <UserSearchDropdown users={searchResults} onSelectUser={handleSelectUser} />
+          </div>
           
-          {searchResult && (
+          {selectedUser && (
             <UserSearchResult
-              user={searchResult}
+              user={selectedUser}
               onSendRequest={handleSendRequest}
               isSending={isSending}
             />
