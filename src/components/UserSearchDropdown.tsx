@@ -11,6 +11,11 @@ const UserSearchDropdown: React.FC<UserSearchDropdownProps> = ({ users, onSelect
     return null;
   }
 
+  const handleSelectUser = (e: React.MouseEvent, user: UserSearchResult) => {
+    e.preventDefault();
+    onSelectUser(user);
+  };
+
   return (
     <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-64 overflow-y-auto">
       {users.map((user) => {
@@ -19,7 +24,9 @@ const UserSearchDropdown: React.FC<UserSearchDropdownProps> = ({ users, onSelect
         return (
           <button
             key={user.id}
-            onClick={() => onSelectUser(user)}
+            onMouseDown={(e) => handleSelectUser(e, user)}
+            type="button"
+            tabIndex={-1}
             className="w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors text-left border-b border-gray-100 last:border-b-0"
           >
             <img
