@@ -180,7 +180,7 @@ const FriendsPage: React.FC = () => {
         {/* Search Section */}
         <div className="mb-12">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Zoek gebruikers</h2>
-          <div ref={searchContainerRef}>
+          <div ref={searchContainerRef} className="relative">
             <UserSearchBar onSearch={handleSearch} isLoading={isSearching} />
             <UserSearchDropdown users={searchResults} onSelectUser={handleSelectUser} />
           </div>
