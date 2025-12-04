@@ -45,6 +45,7 @@ const ProfilePage: React.FC = () => {
     };
 
     fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   if (loading) {

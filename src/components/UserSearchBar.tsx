@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface UserSearchBarProps {
   onSearch: (username: string) => void;
@@ -6,6 +7,7 @@ interface UserSearchBarProps {
 }
 
 const UserSearchBar: React.FC<UserSearchBarProps> = ({ onSearch, isLoading }) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const previousSearchRef = useRef<string>('');
 
@@ -45,7 +47,7 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ onSearch, isLoading }) =>
         type="text"
         value={searchTerm}
         onChange={handleInputChange}
-        placeholder="Typ om te zoeken (min. 2 letters)..."
+        placeholder={t('friends.searchPlaceholder')}
         className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         autoComplete="off"
       />
@@ -72,7 +74,7 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ onSearch, isLoading }) =>
       
       {searchTerm.trim().length > 0 && searchTerm.trim().length < 2 && (
         <p className="mt-2 text-sm text-gray-500">
-          Typ nog {2 - searchTerm.trim().length} {2 - searchTerm.trim().length === 1 ? 'letter' : 'letters'}...
+          {t('friends.searchMinLength', { count: 2 - searchTerm.trim().length })}
         </p>
       )}
     </div>

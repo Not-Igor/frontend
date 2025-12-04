@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FriendRequest } from '../services/friendService';
 
 interface FriendRequestListProps {
@@ -8,10 +9,11 @@ interface FriendRequestListProps {
 }
 
 const FriendRequestList: React.FC<FriendRequestListProps> = ({ requests, onRespond, isResponding }) => {
+  const { t } = useTranslation();
   if (requests.length === 0) {
     return (
       <div className="bg-gray-50 rounded-lg p-8 text-center">
-        <p className="text-gray-600">Geen openstaande vriendschapsverzoeken</p>
+        <p className="text-gray-600">{t('friends.requests.noPendingRequests')}</p>
       </div>
     );
   }
@@ -32,7 +34,7 @@ const FriendRequestList: React.FC<FriendRequestListProps> = ({ requests, onRespo
                 />
                 <div className="min-w-0 flex-1">
                   <p className="font-medium text-gray-800 truncate">{request.senderUsername}</p>
-                  <p className="text-sm text-gray-500">wil vrienden worden</p>
+                  <p className="text-sm text-gray-500">{t('friends.wantsToBeFriends')}</p>
                 </div>
               </div>
               <div className="flex gap-2 flex-shrink-0">
@@ -41,7 +43,7 @@ const FriendRequestList: React.FC<FriendRequestListProps> = ({ requests, onRespo
                   onClick={() => onRespond(request.requestId, true)}
                   disabled={isResponding}
                   className="p-2 sm:px-4 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
-                  title="Accepteren"
+                  title={t('friends.requests.accept')}
                 >
                   {/* Mobile: Icon only */}
                   <span className="sm:hidden">
@@ -50,7 +52,7 @@ const FriendRequestList: React.FC<FriendRequestListProps> = ({ requests, onRespo
                     </svg>
                   </span>
                   {/* Desktop: Full text */}
-                  <span className="hidden sm:inline">Accepteren</span>
+                  <span className="hidden sm:inline">{t('friends.requests.accept')}</span>
                 </button>
                 
                 {/* Reject button */}
@@ -58,7 +60,7 @@ const FriendRequestList: React.FC<FriendRequestListProps> = ({ requests, onRespo
                   onClick={() => onRespond(request.requestId, false)}
                   disabled={isResponding}
                   className="p-2 sm:px-4 sm:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
-                  title="Weigeren"
+                  title={t('friends.requests.reject')}
                 >
                   {/* Mobile: Icon only */}
                   <span className="sm:hidden">
@@ -67,7 +69,7 @@ const FriendRequestList: React.FC<FriendRequestListProps> = ({ requests, onRespo
                     </svg>
                   </span>
                   {/* Desktop: Full text */}
-                  <span className="hidden sm:inline">Weigeren</span>
+                  <span className="hidden sm:inline">{t('friends.requests.reject')}</span>
                 </button>
               </div>
             </div>

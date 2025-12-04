@@ -49,19 +49,29 @@
     "friendsCount_plural": "{{count}} friends",
     "searchUsers": "Search Users",
     "searchPlaceholder": "Type to search (min. 2 letters)...",
+    "searchMinLength": "Type {{count}} more letter...",
+    "searchMinLength_plural": "Type {{count}} more letters...",
     "searching": "Searching...",
     "noResults": "No users found",
     "sendRequest": "Send Friend Request",
     "requestSent": "Friend request sent!",
+    "wantsToBeFriends": "wants to be friends",
+    "friend": "Friend",
+    "errors": {
+      "respondToRequest": "Could not respond to friend request"
+    },
     "requests": {
       "title": "Friend Requests",
       "pending": "Pending Requests",
       "accept": "Accept",
       "reject": "Reject",
-      "noRequests": "No pending requests"
+      "noRequests": "No pending requests",
+      "noPendingRequests": "No pending friend requests"
     },
     "list": {
       "empty": "You don't have any friends yet",
+      "emptyMessage": "You haven't added any friends yet",
+      "emptyHint": "Search for users and send friend requests!",
       "loading": "Loading friends..."
     }
   },
