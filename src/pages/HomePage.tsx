@@ -22,14 +22,16 @@ const HomePage: React.FC = () => {
 
   const handleCreateCompetition = async (title: string, icon: string, participantIds: number[]) => {
     try {
-      // TODO: API call to create competition
-      console.log('Creating competition:', { title, icon, participantIds });
+      const competitionService = (await import('../services/competitionService')).default;
       
-      // For now, just navigate to a placeholder competition page
-      // Replace with actual competition ID from API response
-      const mockCompetitionId = Math.floor(Math.random() * 1000);
+      const competition = await competitionService.createCompetition({
+        title,
+        icon,
+        participantIds
+      });
+      
       setIsModalOpen(false);
-      navigate(`/competition/${mockCompetitionId}`);
+      navigate(`/competition/${competition.id}`);
     } catch (error) {
       console.error('Failed to create competition:', error);
       alert('Failed to create competition. Please try again.');
