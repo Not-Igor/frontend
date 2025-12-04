@@ -8,6 +8,7 @@ interface UserSearchBarProps {
 const UserSearchBar: React.FC<UserSearchBarProps> = ({ onSearch, isLoading }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // Cleanup on unmount
@@ -32,6 +33,10 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ onSearch, isLoading }) =>
       // Debounce the search - wait 500ms after user stops typing
       debounceTimerRef.current = setTimeout(() => {
         onSearch(value.trim());
+        // Restore focus after search completes
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 0);
       }, 500);
     }
   };
@@ -53,12 +58,14 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ onSearch, isLoading }) =>
         <div className="flex gap-2">
           <div className="flex-1 relative">
             <input
+              ref={inputRef}
               type="text"
               value={searchTerm}
               onChange={handleInputChange}
               placeholder="Typ om te zoeken (min. 2 letters)..."
               className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               disabled={isLoading}
+              autoComplete="off"
             />
             {/* Search icon */}
             <svg 
