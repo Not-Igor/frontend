@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import authService, { AuthenticationResponse } from '../services/authService';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [user, setUser] = useState<AuthenticationResponse | null>(null);
 
   useEffect(() => {
@@ -24,10 +26,10 @@ const HomePage: React.FC = () => {
     <div className="h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Welkom
+          {t('home.welcome', { username: user.username })}
         </h1>
-        <p className="text-2xl text-gray-600">
-          {user.username}
+        <p className="text-xl text-gray-500 mt-2">
+          {t('home.greeting')}
         </p>
       </div>
     </div>

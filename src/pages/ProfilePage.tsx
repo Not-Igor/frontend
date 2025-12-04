@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import authService from '../services/authService';
 import apiService from '../services/apiService';
+import LanguageSelector from '../components/LanguageSelector';
 
 interface UserProfile {
   id: number;
@@ -13,6 +15,7 @@ interface UserProfile {
 
 const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
@@ -35,19 +38,20 @@ const ProfilePage: React.FC = () => {
         setProfile(profileData);
       } catch (error: any) {
         console.error('Error fetching profile:', error);
-        setError('Kon profiel niet laden');
+        setError(t('common.error'));
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   if (loading) {
     return (
       <div className="h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Laden...</div>
+        <div className="text-gray-600">{t('common.loading')}</div>
       </div>
     );
   }
@@ -55,7 +59,7 @@ const ProfilePage: React.FC = () => {
   if (error || !profile) {
     return (
       <div className="h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center">
-        <div className="text-red-600">{error || 'Profiel niet gevonden'}</div>
+        <div className="text-red-600">{error || t('common.error')}</div>
       </div>
     );
   }
@@ -77,20 +81,28 @@ const ProfilePage: React.FC = () => {
           </span>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="border-t border-gray-200 pt-4">
             <div className="flex justify-between py-3">
-              <span className="text-gray-600 font-medium">Gebruikersnaam:</span>
+              <span className="text-gray-600 font-medium">{t('profile.username')}:</span>
               <span className="text-gray-900">{profile.username}</span>
             </div>
             <div className="flex justify-between py-3">
-              <span className="text-gray-600 font-medium">Email:</span>
+              <span className="text-gray-600 font-medium">{t('profile.email')}:</span>
               <span className="text-gray-900">{profile.email}</span>
             </div>
             <div className="flex justify-between py-3">
-              <span className="text-gray-600 font-medium">Gebruiker ID:</span>
-              <span className="text-gray-900">{profile.id}</span>
+              <span className="text-gray-600 font-medium">{t('profile.role')}:</span>
+              <span className="text-gray-900">{profile.role}</span>
             </div>
+          </div>
+
+          {/* Language Selector Section */}
+          <div className="border-t border-gray-200 pt-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              {t('profile.language.title')}
+            </h3>
+            <LanguageSelector />
           </div>
         </div>
       </div>

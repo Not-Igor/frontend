@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import UserSearchBar from '../components/UserSearchBar';
 import UserSearchResult from '../components/UserSearchResult';
 import UserSearchDropdown from '../components/UserSearchDropdown';
@@ -16,6 +17,7 @@ interface Friend {
 
 const FriendsPage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const [searchResults, setSearchResults] = useState<UserSearchResultType[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserSearchResultType | null>(null);
@@ -148,7 +150,7 @@ const FriendsPage: React.FC = () => {
       // Notify navbar to update badge count
       friendRequestEvents.emit(FRIEND_REQUEST_UPDATED);
     } catch (err: any) {
-      setError(err.message || 'Kon niet reageren op vriendschapsverzoek');
+      setError(err.message || t('friends.errors.respondToRequest'));
     } finally {
       setIsResponding(false);
     }
@@ -157,7 +159,7 @@ const FriendsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Vrienden</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">{t('friends.title')}</h1>
 
         {/* Error and Success Messages */}
         {error && (
@@ -173,13 +175,13 @@ const FriendsPage: React.FC = () => {
 
         {/* Friends List Section */}
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Mijn vrienden</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('friends.myFriends')}</h2>
           <FriendsList friends={friends} isLoading={isLoadingFriends} />
         </div>
 
         {/* Search Section */}
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Zoek gebruikers</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('friends.searchUsers')}</h2>
           <div ref={searchContainerRef} className="relative">
             <UserSearchBar onSearch={handleSearch} isLoading={isSearching} />
             <UserSearchDropdown users={searchResults} onSelectUser={handleSelectUser} />
@@ -197,7 +199,7 @@ const FriendsPage: React.FC = () => {
         {/* Friend Requests Section */}
         <div>
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            Vriendschapsverzoeken ({friendRequests.length})
+            {t('friends.requests.title')} ({friendRequests.length})
           </h2>
           <FriendRequestList
             requests={friendRequests}

@@ -1,0 +1,99 @@
+{
+  "app": {
+    "name": "KompApp",
+    "welcome": "Welkom"
+  },
+  "nav": {
+    "home": "Home",
+    "friends": "Vrienden",
+    "profile": "Profiel",
+    "logout": "Uitloggen"
+  },
+  "auth": {
+    "login": {
+      "title": "Inloggen",
+      "username": "Gebruikersnaam",
+      "password": "Wachtwoord",
+      "button": "Inloggen",
+      "error": "Inloggen mislukt",
+      "success": "Succesvol ingelogd!",
+      "noAccount": "Nog geen account?",
+      "registerLink": "Registreer hier"
+    },
+    "register": {
+      "title": "Registreren",
+      "username": "Gebruikersnaam",
+      "email": "E-mail",
+      "password": "Wachtwoord",
+      "confirmPassword": "Bevestig Wachtwoord",
+      "button": "Registreren",
+      "error": "Registratie mislukt",
+      "success": "Succesvol geregistreerd!",
+      "hasAccount": "Al een account?",
+      "loginLink": "Log hier in",
+      "passwordMismatch": "Wachtwoorden komen niet overeen",
+      "passwordTooShort": "Wachtwoord moet minimaal 6 tekens bevatten"
+    }
+  },
+  "profile": {
+    "title": "Mijn Profiel",
+    "username": "Gebruikersnaam",
+    "email": "E-mail",
+    "role": "Rol",
+    "language": {
+      "title": "Taal",
+      "select": "Selecteer Taal"
+    }
+  },
+  "friends": {
+    "title": "Vrienden",
+    "myFriends": "Mijn Vrienden",
+    "friendsCount": "{{count}} vriend",
+    "friendsCount_plural": "{{count}} vrienden",
+    "searchUsers": "Zoek Gebruikers",
+    "searchPlaceholder": "Typ om te zoeken (min. 2 letters)...",
+    "searchMinLength": "Typ nog {{count}} letter...",
+    "searchMinLength_plural": "Typ nog {{count}} letters...",
+    "searching": "Zoeken...",
+    "noResults": "Geen gebruikers gevonden",
+    "sendRequest": "Stuur Vriendschapsverzoek",
+    "requestSent": "Vriendschapsverzoek verzonden!",
+    "wantsToBeFriends": "wil vrienden worden",
+    "friend": "Vriend",
+    "errors": {
+      "respondToRequest": "Kon niet reageren op vriendschapsverzoek"
+    },
+    "requests": {
+      "title": "Vriendschapsverzoeken",
+      "pending": "Openstaande Verzoeken",
+      "accept": "Accepteren",
+      "reject": "Weigeren",
+      "noRequests": "Geen openstaande verzoeken",
+      "noPendingRequests": "Geen openstaande vriendschapsverzoeken"
+    },
+    "list": {
+      "empty": "Je hebt nog geen vrienden",
+      "emptyMessage": "Je hebt nog geen vrienden toegevoegd",
+      "emptyHint": "Zoek gebruikers en stuur vriendschapsverzoeken!",
+      "loading": "Vrienden laden..."
+    }
+  },
+  "home": {
+    "welcome": "Welkom, {{username}}!",
+    "greeting": "Welkom bij KompApp"
+  },
+  "language": {
+    "en": "English",
+    "nl": "Nederlands"
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Er is een fout opgetreden",
+    "success": "Succes!",
+    "cancel": "Annuleren",
+    "save": "Opslaan",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "close": "Sluiten"
+  }
+}
