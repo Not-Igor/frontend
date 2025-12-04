@@ -1,15 +1,9 @@
 import React from 'react';
-
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  role?: string;
-}
+import { UserSearchResult } from '../services/friendService';
 
 interface UserSearchDropdownProps {
-  users: User[];
-  onSelectUser: (user: User) => void;
+  users: UserSearchResult[];
+  onSelectUser: (user: UserSearchResult) => void;
 }
 
 const UserSearchDropdown: React.FC<UserSearchDropdownProps> = ({ users, onSelectUser }) => {
