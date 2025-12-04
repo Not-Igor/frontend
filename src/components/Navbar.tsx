@@ -1,11 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import authService from '../services/authService';
+import friendService from '../services/friendService';
+import { friendRequestEvents, FRIEND_REQUEST_UPDATED } from '../utils/events';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isAuthenticated = authService.isAuthenticated();
+  const [friendRequestCount, setFriendRequestCount] = useState<number>(0);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadFriendRequestCount();
+      
+      // Listen for friend request updates
+      friendRequestEvents.on(FRIEND_REQUEST_UPDATED, loadFriendRequestCount);
+      
+      // Poll every 30 seconds for new requests
+      const interval = setInterval(loadFriendRequestCount, 30000);
+      
+      return () => {
+        friendRequestEvents.off(FRIEND_REQUEST_UPDATED, loadFriendRequestCount);
+        clearInterval(interval);
+      };
+    }
+  }, [isAuthenticated]);
+
+  const loadFriendRequestCount = async () => {
+    try {
+      const user = authService.getUser();
+      if (user) {
+        const requests = await friendService.getReceivedRequests(user.id);
+        setFriendRequestCount(requests.length);
+      }
+    } catch (err) {
+      console.error('Failed to load friend request count:', err);
+    }
+  };
 
   const handleLogout = () => {
     authService.logout();
@@ -49,13 +81,18 @@ const Navbar: React.FC = () => {
                 </button>
                 <button
                   onClick={() => navigate('/friends')}
-                  className={`px-3 py-2 rounded-md text-sm font-medium ${
+                  className={`px-3 py-2 rounded-md text-sm font-medium relative ${
                     location.pathname === '/friends'
                       ? 'text-indigo-600'
                       : 'text-gray-700 hover:text-indigo-600'
                   }`}
                 >
                   Vrienden
+                  {friendRequestCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                      {friendRequestCount}
+                    </span>
+                  )}
                 </button>
                 <button
                   onClick={handleLogout}

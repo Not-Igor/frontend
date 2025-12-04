@@ -5,6 +5,7 @@ import UserSearchResult from '../components/UserSearchResult';
 import FriendRequestList from '../components/FriendRequestList';
 import authService from '../services/authService';
 import friendService, { UserSearchResult as UserSearchResultType, FriendRequest } from '../services/friendService';
+import { friendRequestEvents, FRIEND_REQUEST_UPDATED } from '../utils/events';
 
 const FriendsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -91,6 +92,8 @@ const FriendsPage: React.FC = () => {
       await friendService.respondToRequest(requestId, accepted);
       setSuccessMessage(accepted ? 'Vriendschapsverzoek geaccepteerd!' : 'Vriendschapsverzoek geweigerd');
       await loadFriendRequests();
+      // Notify navbar to update badge count
+      friendRequestEvents.emit(FRIEND_REQUEST_UPDATED);
     } catch (err: any) {
       setError(err.message || 'Kon niet reageren op vriendschapsverzoek');
     } finally {
