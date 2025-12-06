@@ -114,6 +114,8 @@
     "leaderboard": "Leaderboard",
     "noCompetitions": "No competitions yet",
     "noCompetitionsMessage": "Create your first competition to get started!",
+    "noResults": "No competitions found",
+    "noResultsMessage": "Try adjusting your filters to find what you're looking for.",
     "yourCompetitions": "Your Competitions ({{count}})",
     "loadingCompetitions": "Loading competitions...",
     "createdBy": "Created by {{creator}} • {{date}}",
@@ -223,5 +225,14 @@
     "selectedCount_plural": "{{count}} participants selected",
     "clearAll": "Clear all",
     "alreadyParticipant": "already in competition"
+  },
+  "filter": {
+    "filterByUser": "Filter by User",
+    "enterUsername": "Enter username...",
+    "sortBy": "Sort by",
+    "creationDate": "Creation Date",
+    "alphabetical": "Alphabetical",
+    "ascending": "Ascending",
+    "descending": "Descending"
   }
 }

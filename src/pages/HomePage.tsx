@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import authService, { AuthenticationResponse } from '../services/authService';
 import CreateCompetitionModal from '../components/CreateCompetitionModal';
 import CompetitionCard from '../components/CompetitionCard';
 import competitionService, { CompetitionDto } from '../services/competitionService';
+import CompetitionFilter, { SortOption, SortDirection } from '../components/CompetitionFilter';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -13,6 +14,11 @@ const HomePage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [competitions, setCompetitions] = useState<CompetitionDto[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Filter and sort state
+  const [userFilter, setUserFilter] = useState('');
+  const [sortOption, setSortOption] = useState<SortOption>('createdAt');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
   useEffect(() => {
     if (!authService.isAuthenticated()) {
@@ -38,6 +44,24 @@ const HomePage: React.FC = () => {
       setLoading(false);
     }
   };
+  
+  const filteredAndSortedCompetitions = useMemo(() => {
+    let filtered = competitions.filter(comp =>
+      comp.participants.some(p => p.username.toLowerCase().includes(userFilter.toLowerCase()))
+    );
+
+    filtered.sort((a, b) => {
+      const aValue = a[sortOption];
+      const bValue = b[sortOption];
+
+      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    return filtered;
+  }, [competitions, userFilter, sortOption, sortDirection]);
+
 
   const handleCreateCompetition = async (title: string, icon: string, participantIds: number[]) => {
     try {
@@ -93,20 +117,41 @@ const HomePage: React.FC = () => {
           </span>
         </button>
 
-        {/* Competitions List */}
+        {/* Competitions Section */}
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
             <p className="mt-4 text-gray-600">{t('competition.loadingCompetitions')}</p>
           </div>
         ) : competitions.length > 0 ? (
-          <div className="space-y-4">
+          <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              {t('competition.yourCompetitions', { count: competitions.length })}
+              {t('competition.yourCompetitions', { count: filteredAndSortedCompetitions.length })}
             </h2>
-            {competitions.map((competition) => (
-              <CompetitionCard key={competition.id} competition={competition} />
-            ))}
+            <CompetitionFilter
+              userFilter={userFilter}
+              onUserFilterChange={setUserFilter}
+              sortOption={sortOption}
+              onSortOptionChange={setSortOption}
+              sortDirection={sortDirection}
+              onSortDirectionChange={setSortDirection}
+            />
+            {filteredAndSortedCompetitions.length > 0 ? (
+              <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+                {filteredAndSortedCompetitions.map((competition) => (
+                  <CompetitionCard key={competition.id} competition={competition} />
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white rounded-xl shadow-md p-12 text-center">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  {t('competition.noResults')}
+                </h3>
+                <p className="text-gray-500">
+                  {t('competition.noResultsMessage')}
+                </p>
+              </div>
+            )}
           </div>
         ) : (
           <div className="bg-white rounded-xl shadow-md p-12 text-center">

@@ -114,6 +114,8 @@
     "leaderboard": "Klassement",
     "noCompetitions": "Nog geen competities",
     "noCompetitionsMessage": "Maak je eerste competitie aan om te beginnen!",
+    "noResults": "Geen competities gevonden",
+    "noResultsMessage": "Pas je filters aan om te vinden wat je zoekt.",
     "yourCompetitions": "Jouw Competities ({{count}})",
     "loadingCompetitions": "Competities laden...",
     "createdBy": "Aangemaakt door {{creator}} • {{date}}",
@@ -223,5 +225,14 @@
     "selectedCount_plural": "{{count}} deelnemers geselecteerd",
     "clearAll": "Alles wissen",
     "alreadyParticipant": "al in competitie"
+  },
+  "filter": {
+    "filterByUser": "Filter op Gebruiker",
+    "enterUsername": "Voer gebruikersnaam in...",
+    "sortBy": "Sorteer op",
+    "creationDate": "Aanmaakdatum",
+    "alphabetical": "Alfabetisch",
+    "ascending": "Oplopend",
+    "descending": "Aflopend"
   }
 }
