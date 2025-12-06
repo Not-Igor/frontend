@@ -56,6 +56,13 @@ const NotificationDropdown: React.FC = () => {
   const handleToggle = async () => {
     if (!isOpen) {
       await loadNotifications();
+      // Mark all as read when opening dropdown
+      if (unreadCount > 0) {
+        setTimeout(async () => {
+          await notificationService.markAllAsRead();
+          setUnreadCount(0);
+        }, 500); // Small delay to let user see the notifications first
+      }
     }
     setIsOpen(!isOpen);
   };
