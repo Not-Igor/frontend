@@ -91,6 +91,10 @@ class AuthService {
     const token = this.getToken();
     return token ? { Authorization: `Bearer ${token}` } : {};
   }
+
+  getCurrentUser(): AuthenticationResponse | null {
+    return this.getUser();
+  }
 }
 
 export default new AuthService();
