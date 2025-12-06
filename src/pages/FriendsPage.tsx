@@ -143,6 +143,8 @@ const FriendsPage: React.FC = () => {
       await friendService.sendFriendRequest(user.id, receiverUsername);
       setSuccessMessage('Vriendschapsverzoek succesvol verzonden!');
       setSelectedUser(null);
+      // Reload sent requests to show the new request
+      await loadSentRequests();
     } catch (err: any) {
       setError(err.message || 'Kon vriendschapsverzoek niet verzenden');
     } finally {
