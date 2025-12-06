@@ -8,7 +8,7 @@ import LanguageSelector from '../components/LanguageSelector';
 interface UserProfile {
   id: number;
   username: string;
-  email: string;
+  email: string | null;
   role: string;
   avatarUrl: string;
 }
@@ -86,10 +86,6 @@ const ProfilePage: React.FC = () => {
             <div className="flex justify-between py-3">
               <span className="text-gray-600 font-medium">{t('profile.username')}:</span>
               <span className="text-gray-900">{profile.username}</span>
-            </div>
-            <div className="flex justify-between py-3">
-              <span className="text-gray-600 font-medium">{t('profile.email')}:</span>
-              <span className="text-gray-900">{profile.email}</span>
             </div>
             <div className="flex justify-between py-3">
               <span className="text-gray-600 font-medium">{t('profile.role')}:</span>
