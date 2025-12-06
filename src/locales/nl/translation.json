@@ -94,6 +94,119 @@
     "save": "Opslaan",
     "delete": "Verwijderen",
     "edit": "Bewerken",
-    "close": "Sluiten"
+    "close": "Sluiten",
+    "back": "Terug",
+    "create": "Aanmaken",
+    "submit": "Versturen",
+    "confirmed": "Bevestigd",
+    "status": "Status"
+  },
+  "competition": {
+    "title": "Competitie",
+    "create": "Competitie Aanmaken",
+    "createNew": "Nieuwe Competitie Aanmaken",
+    "createButton": "Competitie Aanmaken",
+    "competitionTitle": "Competitie Titel",
+    "selectParticipants": "Selecteer Deelnemers",
+    "participants": "Deelnemers",
+    "participantsCount": "{{count}} deelnemer",
+    "participantsCount_plural": "{{count}} deelnemers",
+    "leaderboard": "Klassement",
+    "noCompetitions": "Nog geen competities",
+    "noCompetitionsMessage": "Maak je eerste competitie aan om te beginnen!",
+    "yourCompetitions": "Jouw Competities ({{count}})",
+    "loadingCompetitions": "Competities laden...",
+    "createdBy": "Aangemaakt door {{creator}} • {{date}}",
+    "createdByOn": "Aangemaakt door {{creator}} op {{date}}",
+    "view": "Bekijken",
+    "readyToCompete": "Klaar om te strijden?",
+    "challengeFriends": "Maak een nieuwe competitie aan en daag je vrienden uit!",
+    "info": "Info",
+    "matches": "Wedstrijden",
+    "errors": {
+      "selectTitle": "Voer een competitie titel in",
+      "selectParticipant": "Selecteer minimaal één deelnemer",
+      "loadFailed": "Competitie laden mislukt",
+      "createFailed": "Competitie aanmaken mislukt. Probeer het opnieuw."
+    },
+    "placeholder": {
+      "title": "bijv., Weekend Voetbal Uitdaging"
+    },
+    "characterCount": "{{count}}/50 tekens"
+  },
+  "match": {
+    "create": "Wedstrijd Aanmaken",
+    "createButton": "Maak een Wedstrijd",
+    "startMatch": "Start Wedstrijd",
+    "matchTitle": "Wedstrijd Titel",
+    "match": "Wedstrijd {{number}}",
+    "participants": "Deelnemers",
+    "participantsScores": "Deelnemers & Scores",
+    "selectParticipants": "Selecteer Deelnemers ({{count}} geselecteerd)",
+    "submitScores": "Scores Versturen",
+    "editScores": "Scores Bewerken",
+    "saveChanges": "Wijzigingen Opslaan",
+    "submitting": "Versturen...",
+    "saving": "Opslaan...",
+    "creating": "Aanmaken...",
+    "status": {
+      "completed": "Voltooid",
+      "ongoing": "Bezig",
+      "inProgress": "Bezig"
+    },
+    "noMatches": "Nog geen wedstrijden. Maak je eerste wedstrijd aan!",
+    "noMatchesFiltered": "Geen {{filter}} wedstrijden gevonden.",
+    "allParticipantsAuto": "Alle deelnemers spelen automatisch mee in deze wedstrijd.",
+    "completedOn": "Voltooid op {{date}} om {{time}}",
+    "errors": {
+      "selectTwoParticipants": "Selecteer minimaal 2 deelnemers",
+      "createFailed": "Wedstrijd aanmaken mislukt",
+      "submitFailed": "Scores versturen mislukt"
+    },
+    "filter": {
+      "all": "Alle",
+      "ongoing": "Bezig",
+      "completed": "Voltooid"
+    },
+    "sort": {
+      "newest": "Nieuwste Eerst",
+      "oldest": "Oudste Eerst"
+    },
+    "placeholder": {
+      "title": "Wedstrijd titel"
+    }
+  },
+  "leaderboard": {
+    "title": "Klassement",
+    "noMatches": "Nog geen wedstrijden voltooid. Begin met strijden!",
+    "columns": {
+      "rank": "#",
+      "player": "Speler",
+      "matchesPlayed": "GS",
+      "wins": "W",
+      "draws": "G",
+      "losses": "V",
+      "pointsScored": "P"
+    },
+    "legend": {
+      "matchesPlayed": "Gespeeld",
+      "wins": "Gewonnen",
+      "draws": "Gelijk",
+      "losses": "Verloren",
+      "pointsScored": "Punten"
+    }
+  },
+  "date": {
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "daysAgo": "{{count}} dagen geleden"
+  },
+  "userSelector": {
+    "loadingFriends": "Vrienden laden...",
+    "failedToLoad": "Vrienden laden mislukt",
+    "noFriends": "Je hebt nog geen vrienden. Voeg eerst wat vrienden toe!",
+    "selectedCount": "{{count}} deelnemer geselecteerd",
+    "selectedCount_plural": "{{count}} deelnemers geselecteerd",
+    "clearAll": "Alles wissen"
   }
 }

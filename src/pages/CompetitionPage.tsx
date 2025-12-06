@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import authService from '../services/authService';
 import competitionService, { CompetitionDto, ParticipantDto } from '../services/competitionService';
 import matchService, { MatchDto } from '../services/matchService';
@@ -11,6 +12,7 @@ type TabType = 'info' | 'matches';
 const CompetitionPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [competition, setCompetition] = useState<CompetitionDto | null>(null);
   const [participants, setParticipants] = useState<ParticipantDto[]>([]);
   const [matches, setMatches] = useState<MatchDto[]>([]);
@@ -46,7 +48,7 @@ const CompetitionPage: React.FC = () => {
       setMatches(matchesData);
     } catch (err: any) {
       console.error('Failed to load competition:', err);
-      setError('Failed to load competition');
+      setError(t('competition.errors.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -123,7 +125,7 @@ const CompetitionPage: React.FC = () => {
   if (loading) {
     return (
       <div className="h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading competition...</div>
+        <div className="text-gray-600">{t('competition.loadingCompetitions')}</div>
       </div>
     );
   }
@@ -133,13 +135,13 @@ const CompetitionPage: React.FC = () => {
       <div className="h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            {error || 'Competition not found'}
+            {error || t('competition.errors.loadFailed')}
           </h2>
           <button
             onClick={() => navigate('/home')}
             className="text-indigo-600 hover:text-indigo-700 font-medium"
           >
-            Go back home
+            {t('common.back')} Home
           </button>
         </div>
       </div>
@@ -161,7 +163,7 @@ const CompetitionPage: React.FC = () => {
               <svg className="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Back
+              {t('common.back')}
             </button>
           </div>
           
@@ -170,7 +172,7 @@ const CompetitionPage: React.FC = () => {
             <div>
               <h1 className="text-3xl font-bold text-gray-900">{competition.title}</h1>
               <p className="text-gray-500 mt-1">
-                Created by {competition.creator.username} on {new Date(competition.createdAt).toLocaleDateString()}
+                {t('competition.createdByOn', { creator: competition.creator.username, date: new Date(competition.createdAt).toLocaleDateString() })}
               </p>
             </div>
           </div>
@@ -185,7 +187,7 @@ const CompetitionPage: React.FC = () => {
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              Info
+              {t('competition.info')}
               {activeTab === 'info' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"></div>
               )}
@@ -198,7 +200,7 @@ const CompetitionPage: React.FC = () => {
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              Matches
+              {t('competition.matches')}
               {activeTab === 'matches' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"></div>
               )}
@@ -219,14 +221,14 @@ const CompetitionPage: React.FC = () => {
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
-                <span className="font-medium">Create a Match</span>
+                <span className="font-medium">{t('match.createButton')}</span>
               </button>
             )}
 
             {/* Participants */}
             <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">
-                Participants ({participants.length})
+                {t('competition.participants')} ({participants.length})
               </h2>
               <div className="space-y-2">
                 {participants.map((participant, index) => (
@@ -257,23 +259,23 @@ const CompetitionPage: React.FC = () => {
 
             {/* Leaderboard */}
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Leaderboard</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">{t('leaderboard.title')}</h2>
               {participants.length === 0 || participants.every(p => p.matchesPlayed === 0) ? (
                 <div className="text-center py-8 text-gray-500">
-                  <p>No matches completed yet. Start competing!</p>
+                  <p>{t('leaderboard.noMatches')}</p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b-2 border-gray-200">
-                        <th className="text-left py-3 px-2 text-sm font-semibold text-gray-600">#</th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Player</th>
-                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">MP</th>
-                        <th className="text-center py-3 px-3 text-sm font-semibold text-indigo-600">W</th>
-                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">D</th>
-                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">L</th>
-                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">PS</th>
+                        <th className="text-left py-3 px-2 text-sm font-semibold text-gray-600">{t('leaderboard.columns.rank')}</th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">{t('leaderboard.columns.player')}</th>
+                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">{t('leaderboard.columns.matchesPlayed')}</th>
+                        <th className="text-center py-3 px-3 text-sm font-semibold text-indigo-600">{t('leaderboard.columns.wins')}</th>
+                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">{t('leaderboard.columns.draws')}</th>
+                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">{t('leaderboard.columns.losses')}</th>
+                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">{t('leaderboard.columns.pointsScored')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -319,11 +321,11 @@ const CompetitionPage: React.FC = () => {
                     </tbody>
                   </table>
                   <div className="mt-4 text-xs text-gray-500 flex flex-wrap gap-x-4 gap-y-1">
-                    <span><strong>MP:</strong> Matches Played</span>
-                    <span><strong>W:</strong> Wins</span>
-                    <span><strong>D:</strong> Draws</span>
-                    <span><strong>L:</strong> Losses</span>
-                    <span><strong>PS:</strong> Points Scored</span>
+                    <span><strong>{t('leaderboard.columns.matchesPlayed')}:</strong> {t('leaderboard.legend.matchesPlayed')}</span>
+                    <span><strong>{t('leaderboard.columns.wins')}:</strong> {t('leaderboard.legend.wins')}</span>
+                    <span><strong>{t('leaderboard.columns.draws')}:</strong> {t('leaderboard.legend.draws')}</span>
+                    <span><strong>{t('leaderboard.columns.losses')}:</strong> {t('leaderboard.legend.losses')}</span>
+                    <span><strong>{t('leaderboard.columns.pointsScored')}:</strong> {t('leaderboard.legend.pointsScored')}</span>
                   </div>
                 </div>
               )}
@@ -335,7 +337,7 @@ const CompetitionPage: React.FC = () => {
         {activeTab === 'matches' && (
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Matches ({matches.length})</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t('competition.matches')} ({matches.length})</h2>
             </div>
 
             {/* Filter and Sort Controls */}
@@ -351,7 +353,7 @@ const CompetitionPage: React.FC = () => {
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    All ({matches.length})
+                    {t('match.filter.all')} ({matches.length})
                   </button>
                   <button
                     onClick={() => setMatchFilter('ongoing')}
@@ -361,7 +363,7 @@ const CompetitionPage: React.FC = () => {
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    Ongoing ({ongoingMatchesCount})
+                    {t('match.filter.ongoing')} ({ongoingMatchesCount})
                   </button>
                   <button
                     onClick={() => setMatchFilter('completed')}
@@ -371,7 +373,7 @@ const CompetitionPage: React.FC = () => {
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    Completed ({completedMatchesCount})
+                    {t('match.filter.completed')} ({completedMatchesCount})
                   </button>
                 </div>
 
@@ -386,7 +388,7 @@ const CompetitionPage: React.FC = () => {
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
-                      Newest First
+                      {t('match.sort.newest')}
                     </button>
                     <button
                       onClick={() => setSortOrder('oldest')}
@@ -396,7 +398,7 @@ const CompetitionPage: React.FC = () => {
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
-                      Oldest First
+                      {t('match.sort.oldest')}
                     </button>
                   </div>
                 )}
@@ -405,11 +407,11 @@ const CompetitionPage: React.FC = () => {
 
             {matches.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                <p>No matches yet. Create your first match!</p>
+                <p>{t('match.noMatches')}</p>
               </div>
             ) : filteredMatches.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                <p>No {matchFilter} matches found.</p>
+                <p>{t('match.noMatchesFiltered', { filter: t(`match.filter.${matchFilter}`) })}</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -432,15 +434,18 @@ const CompetitionPage: React.FC = () => {
                               ? 'bg-green-100 text-green-800'
                               : 'bg-blue-100 text-blue-800'
                           }`}>
-                            {match.status === 'COMPLETED' ? 'Completed' : 'Ongoing'}
+                            {match.status === 'COMPLETED' ? t('match.status.completed') : t('match.status.ongoing')}
                           </span>
                         </div>
                         <p className="text-sm text-gray-500">
-                          {match.participants.length} participants
+                          {t('competition.participantsCount', { count: match.participants.length })}
                         </p>
                         {match.status === 'COMPLETED' && (
                           <p className="text-xs text-gray-400 mt-1">
-                            Completed on {new Date(match.updatedAt).toLocaleDateString()} at {new Date(match.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            {t('match.completedOn', { 
+                              date: new Date(match.updatedAt).toLocaleDateString(), 
+                              time: new Date(match.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                            })}
                           </p>
                         )}
                       </div>

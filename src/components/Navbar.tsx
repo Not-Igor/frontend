@@ -5,6 +5,7 @@ import authService from '../services/authService';
 import friendService from '../services/friendService';
 import { friendRequestEvents, FRIEND_REQUEST_UPDATED } from '../utils/events';
 import NotificationDropdown from './NotificationDropdown';
+import logo from '../logo.png';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -58,7 +59,13 @@ const Navbar: React.FC = () => {
     <nav className="bg-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
-          <div className="flex items-center">
+          <div className="flex items-center space-x-3">
+            <img 
+              src={logo} 
+              alt="Logo" 
+              className="h-10 w-10 object-contain cursor-pointer"
+              onClick={() => handleNavigate('/home')}
+            />
             <h1 
               className="text-xl font-bold text-gray-800 cursor-pointer hover:text-indigo-600 transition-colors"
               onClick={() => handleNavigate('/home')}

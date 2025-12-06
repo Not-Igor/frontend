@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ParticipantDto } from '../services/competitionService';
 
 interface CreateMatchModalProps {
@@ -16,16 +17,17 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
   participants,
   matchNumber,
 }) => {
-  const [title, setTitle] = useState(`Match ${matchNumber}`);
+  const { t } = useTranslation();
+  const [title, setTitle] = useState(t('match.match', { number: matchNumber }));
   const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set());
   const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      setTitle(`Match ${matchNumber}`);
+      setTitle(t('match.match', { number: matchNumber }));
       setSelectedParticipants(new Set(participants.map(p => p.id)));
     }
-  }, [isOpen, matchNumber, participants]);
+  }, [isOpen, matchNumber, participants, t]);
 
   const handleToggleParticipant = (participantId: number) => {
     const newSelected = new Set(selectedParticipants);
@@ -44,7 +46,7 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
       : Array.from(selectedParticipants);
 
     if (participantsToUse.length < 2) {
-      alert('Please select at least 2 participants');
+      alert(t('match.errors.selectTwoParticipants'));
       return;
     }
 
@@ -54,7 +56,7 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
       onClose();
     } catch (error) {
       console.error('Failed to create match:', error);
-      alert('Failed to create match');
+      alert(t('match.errors.createFailed'));
     } finally {
       setIsCreating(false);
     }
@@ -72,7 +74,7 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
         <div className="p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Create Match</h2>
+            <h2 className="text-2xl font-bold text-gray-900">{t('match.create')}</h2>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -86,14 +88,14 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
           {/* Title Input */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Match Title
+              {t('match.matchTitle')}
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              placeholder="Match title"
+              placeholder={t('match.placeholder.title')}
             />
           </div>
 
@@ -101,7 +103,7 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
           {participants.length > 2 && (
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Select Participants ({selectedParticipants.size} selected)
+                {t('match.selectParticipants', { count: selectedParticipants.size })}
               </label>
               <div className="space-y-2 max-h-60 overflow-y-auto">
                 {participants.map((participant) => (
@@ -139,7 +141,7 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
           {participants.length === 2 && (
             <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-sm text-blue-800">
-                All participants will automatically play in this match.
+                {t('match.allParticipantsAuto')}
               </p>
             </div>
           )}
@@ -151,14 +153,14 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
               disabled={isCreating}
               className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               onClick={handleCreate}
               disabled={isCreating || (participants.length > 2 && selectedParticipants.size < 2)}
               className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isCreating ? 'Creating...' : 'Start Match'}
+              {isCreating ? t('match.creating') : t('match.startMatch')}
             </button>
           </div>
         </div>

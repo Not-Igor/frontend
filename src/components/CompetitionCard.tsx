@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { CompetitionDto } from '../services/competitionService';
 
 interface CompetitionCardProps {
@@ -8,6 +9,7 @@ interface CompetitionCardProps {
 
 const CompetitionCard: React.FC<CompetitionCardProps> = ({ competition }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const getAvatarUrl = (username: string) => {
     return `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
@@ -19,9 +21,9 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({ competition }) => {
     const diff = now.getTime() - date.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    if (days === 0) return 'Today';
-    if (days === 1) return 'Yesterday';
-    if (days < 7) return `${days} days ago`;
+    if (days === 0) return t('date.today');
+    if (days === 1) return t('date.yesterday');
+    if (days < 7) return t('date.daysAgo', { count: days });
     return date.toLocaleDateString();
   };
 
@@ -40,7 +42,7 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({ competition }) => {
               {competition.title}
             </h3>
             <p className="text-sm text-gray-500 mt-1">
-              Created by {competition.creator.username} • {formatDate(competition.createdAt)}
+              {t('competition.createdBy', { creator: competition.creator.username, date: formatDate(competition.createdAt) })}
             </p>
           </div>
         </div>
@@ -73,12 +75,12 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({ competition }) => {
             )}
           </div>
           <span className="text-sm text-gray-600 font-medium">
-            {competition.participants.length} participant{competition.participants.length !== 1 ? 's' : ''}
+            {t('competition.participantsCount', { count: competition.participants.length })}
           </span>
         </div>
 
         <div className="flex items-center space-x-1 text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity">
-          <span className="text-sm font-semibold">View</span>
+          <span className="text-sm font-semibold">{t('competition.view')}</span>
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>

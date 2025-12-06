@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import EmojiPicker from './EmojiPicker';
 import UserSelector from './UserSelector';
 
@@ -13,6 +14,7 @@ const CreateCompetitionModal: React.FC<CreateCompetitionModalProps> = ({
   onClose,
   onCreate,
 }) => {
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('🏆');
   const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
@@ -30,12 +32,12 @@ const CreateCompetitionModal: React.FC<CreateCompetitionModalProps> = ({
     e.preventDefault();
     
     if (!title.trim()) {
-      setError('Please enter a competition title');
+      setError(t('competition.errors.selectTitle'));
       return;
     }
 
     if (selectedUserIds.length === 0) {
-      setError('Please select at least one participant');
+      setError(t('competition.errors.selectParticipant'));
       return;
     }
 
@@ -62,7 +64,7 @@ const CreateCompetitionModal: React.FC<CreateCompetitionModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-900">Create New Competition</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{t('competition.createNew')}</h2>
           <button
             onClick={handleClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -83,18 +85,18 @@ const CreateCompetitionModal: React.FC<CreateCompetitionModalProps> = ({
           {/* Title Input */}
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-              Competition Title
+              {t('competition.competitionTitle')}
             </label>
             <input
               type="text"
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g., Weekend Football Challenge"
+              placeholder={t('competition.placeholder.title')}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               maxLength={50}
             />
-            <p className="mt-1 text-sm text-gray-500">{title.length}/50 characters</p>
+            <p className="mt-1 text-sm text-gray-500">{t('competition.characterCount', { count: title.length })}</p>
           </div>
 
           {/* Emoji Picker */}
@@ -110,13 +112,13 @@ const CreateCompetitionModal: React.FC<CreateCompetitionModalProps> = ({
               onClick={handleClose}
               className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               type="submit"
               className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
             >
-              Create Competition
+              {t('competition.createButton')}
             </button>
           </div>
         </form>

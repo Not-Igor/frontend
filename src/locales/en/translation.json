@@ -94,6 +94,119 @@
     "save": "Save",
     "delete": "Delete",
     "edit": "Edit",
-    "close": "Close"
+    "close": "Close",
+    "back": "Back",
+    "create": "Create",
+    "submit": "Submit",
+    "confirmed": "Confirmed",
+    "status": "Status"
+  },
+  "competition": {
+    "title": "Competition",
+    "create": "Create Competition",
+    "createNew": "Create New Competition",
+    "createButton": "Create Competition",
+    "competitionTitle": "Competition Title",
+    "selectParticipants": "Select Participants",
+    "participants": "Participants",
+    "participantsCount": "{{count}} participant",
+    "participantsCount_plural": "{{count}} participants",
+    "leaderboard": "Leaderboard",
+    "noCompetitions": "No competitions yet",
+    "noCompetitionsMessage": "Create your first competition to get started!",
+    "yourCompetitions": "Your Competitions ({{count}})",
+    "loadingCompetitions": "Loading competitions...",
+    "createdBy": "Created by {{creator}} • {{date}}",
+    "createdByOn": "Created by {{creator}} on {{date}}",
+    "view": "View",
+    "readyToCompete": "Ready to compete?",
+    "challengeFriends": "Create a new competition and challenge your friends!",
+    "info": "Info",
+    "matches": "Matches",
+    "errors": {
+      "selectTitle": "Please enter a competition title",
+      "selectParticipant": "Please select at least one participant",
+      "loadFailed": "Failed to load competition",
+      "createFailed": "Failed to create competition. Please try again."
+    },
+    "placeholder": {
+      "title": "e.g., Weekend Football Challenge"
+    },
+    "characterCount": "{{count}}/50 characters"
+  },
+  "match": {
+    "create": "Create Match",
+    "createButton": "Create a Match",
+    "startMatch": "Start Match",
+    "matchTitle": "Match Title",
+    "match": "Match {{number}}",
+    "participants": "Participants",
+    "participantsScores": "Participants & Scores",
+    "selectParticipants": "Select Participants ({{count}} selected)",
+    "submitScores": "Submit Scores",
+    "editScores": "Edit Scores",
+    "saveChanges": "Save Changes",
+    "submitting": "Submitting...",
+    "saving": "Saving...",
+    "creating": "Creating...",
+    "status": {
+      "completed": "Completed",
+      "ongoing": "Ongoing",
+      "inProgress": "IN_PROGRESS"
+    },
+    "noMatches": "No matches yet. Create your first match!",
+    "noMatchesFiltered": "No {{filter}} matches found.",
+    "allParticipantsAuto": "All participants will automatically play in this match.",
+    "completedOn": "Completed on {{date}} at {{time}}",
+    "errors": {
+      "selectTwoParticipants": "Please select at least 2 participants",
+      "createFailed": "Failed to create match",
+      "submitFailed": "Failed to submit scores"
+    },
+    "filter": {
+      "all": "All",
+      "ongoing": "Ongoing",
+      "completed": "Completed"
+    },
+    "sort": {
+      "newest": "Newest First",
+      "oldest": "Oldest First"
+    },
+    "placeholder": {
+      "title": "Match title"
+    }
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "noMatches": "No matches completed yet. Start competing!",
+    "columns": {
+      "rank": "#",
+      "player": "Player",
+      "matchesPlayed": "MP",
+      "wins": "W",
+      "draws": "D",
+      "losses": "L",
+      "pointsScored": "PS"
+    },
+    "legend": {
+      "matchesPlayed": "Matches Played",
+      "wins": "Wins",
+      "draws": "Draws",
+      "losses": "Losses",
+      "pointsScored": "Points Scored"
+    }
+  },
+  "date": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago"
+  },
+  "userSelector": {
+    "loadingFriends": "Loading friends...",
+    "failedToLoad": "Failed to load friends",
+    "noFriends": "You don't have any friends yet. Add some friends first!",
+    "selectedCount": "{{count}} participant selected",
+    "selectedCount_plural": "{{count}} participants selected",
+    "clearAll": "Clear all"
   }
 }

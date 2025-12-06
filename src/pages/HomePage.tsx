@@ -58,7 +58,7 @@ const HomePage: React.FC = () => {
       navigate(`/competition/${competition.id}`);
     } catch (error) {
       console.error('Failed to create competition:', error);
-      alert('Failed to create competition. Please try again.');
+      alert(t('competition.errors.createFailed'));
     }
   };
 
@@ -73,10 +73,10 @@ const HomePage: React.FC = () => {
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">🏆</div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Ready to compete?
+            {t('competition.readyToCompete')}
           </h1>
           <p className="text-lg text-gray-500">
-            Create a new competition and challenge your friends!
+            {t('competition.challengeFriends')}
           </p>
         </div>
         
@@ -89,7 +89,7 @@ const HomePage: React.FC = () => {
             <svg className="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            Create Competition
+            {t('competition.create')}
           </span>
         </button>
 
@@ -97,12 +97,12 @@ const HomePage: React.FC = () => {
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
-            <p className="mt-4 text-gray-600">Loading competitions...</p>
+            <p className="mt-4 text-gray-600">{t('competition.loadingCompetitions')}</p>
           </div>
         ) : competitions.length > 0 ? (
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Your Competitions ({competitions.length})
+              {t('competition.yourCompetitions', { count: competitions.length })}
             </h2>
             {competitions.map((competition) => (
               <CompetitionCard key={competition.id} competition={competition} />
@@ -112,10 +112,10 @@ const HomePage: React.FC = () => {
           <div className="bg-white rounded-xl shadow-md p-12 text-center">
             <div className="text-6xl mb-4">🎯</div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              No competitions yet
+              {t('competition.noCompetitions')}
             </h3>
             <p className="text-gray-500">
-              Create your first competition to get started!
+              {t('competition.noCompetitionsMessage')}
             </p>
           </div>
         )}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import apiService from '../services/apiService';
 import authService from '../services/authService';
 
@@ -15,6 +16,7 @@ interface UserSelectorProps {
 }
 
 const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUser }) => {
+  const { t } = useTranslation();
   const [friends, setFriends] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
@@ -41,7 +43,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUs
       setFriends(friendUsers);
     } catch (err: any) {
       console.error('Failed to load friends:', err);
-      setError('Failed to load friends');
+      setError(t('userSelector.failedToLoad'));
     } finally {
       setLoading(false);
     }
@@ -50,7 +52,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUs
   if (loading) {
     return (
       <div className="text-center py-4 text-gray-500">
-        Loading friends...
+        {t('userSelector.loadingFriends')}
       </div>
     );
   }
@@ -66,7 +68,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUs
   if (friends.length === 0) {
     return (
       <div className="text-center py-4 text-gray-500">
-        You don't have any friends yet. Add some friends first!
+        {t('userSelector.noFriends')}
       </div>
     );
   }
@@ -78,7 +80,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUs
   return (
     <div className="mt-4">
       <label className="block text-sm font-medium text-gray-700 mb-2">
-        Select Participants
+        {t('competition.selectParticipants')}
       </label>
       <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-lg bg-white shadow-sm">
         {friends.map((friend) => {
@@ -122,7 +124,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUs
       </div>
       <div className="mt-3 flex items-center justify-between text-sm">
         <p className="text-gray-500">
-          {selectedUserIds.length} participant{selectedUserIds.length !== 1 ? 's' : ''} selected
+          {t('userSelector.selectedCount', { count: selectedUserIds.length })}
         </p>
         {selectedUserIds.length > 0 && (
           <button
@@ -130,7 +132,7 @@ const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUs
             onClick={() => selectedUserIds.forEach(id => onToggleUser(id))}
             className="text-indigo-600 hover:text-indigo-700 font-medium"
           >
-            Clear all
+            {t('userSelector.clearAll')}
           </button>
         )}
       </div>

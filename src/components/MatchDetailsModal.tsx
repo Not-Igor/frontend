@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MatchDto, MatchStatus } from '../services/matchService';
 import authService from '../services/authService';
 
@@ -15,6 +16,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
   match,
   onSubmitScores,
 }) => {
+  const { t } = useTranslation();
   const [scores, setScores] = useState<Record<number, number>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -52,7 +54,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
       // Don't close modal, just refresh
     } catch (error) {
       console.error('Failed to submit scores:', error);
-      alert('Failed to submit scores');
+      alert(t('match.errors.submitFailed'));
     } finally {
       setIsSubmitting(false);
     }
@@ -77,11 +79,11 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
             <div>
               <h2 className="text-2xl font-bold text-gray-900">{match.title}</h2>
               <p className="text-sm text-gray-500">
-                Status: <span className={`font-medium ${
+                {t('common.status')}: <span className={`font-medium ${
                   match.status === MatchStatus.COMPLETED ? 'text-green-600' :
                   match.status === MatchStatus.IN_PROGRESS ? 'text-blue-600' :
                   'text-gray-600'
-                }`}>{match.status}</span>
+                }`}>{match.status === MatchStatus.COMPLETED ? t('match.status.completed') : t('match.status.ongoing')}</span>
               </p>
             </div>
             <button
@@ -96,7 +98,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
 
           {/* Scores Section */}
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Participants & Scores</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('match.participantsScores')}</h3>
             <div className="space-y-3">
               {match.participants.map((participant) => {
                 const participantScore = match.scores?.find(s => s.userId === participant.id);
@@ -122,7 +124,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                             </svg>
-                            Confirmed
+                            {t('common.confirmed')}
                           </p>
                         )}
                       </div>
@@ -155,7 +157,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
               disabled={isSubmitting}
               className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
             >
-              Close
+              {t('common.close')}
             </button>
 
             {/* Participant can submit scores when match is IN_PROGRESS */}
@@ -165,7 +167,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                 disabled={isSubmitting}
                 className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
               >
-                {isSubmitting ? 'Submitting...' : 'Submit Scores'}
+                {isSubmitting ? t('match.submitting') : t('match.submitScores')}
               </button>
             )}
 
@@ -175,7 +177,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                 onClick={() => setIsEditing(true)}
                 className="flex-1 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
               >
-                Edit Scores
+                {t('match.editScores')}
               </button>
             )}
 
@@ -187,14 +189,14 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                   disabled={isSubmitting}
                   className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
                   className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
                 >
-                  {isSubmitting ? 'Saving...' : 'Save Changes'}
+                  {isSubmitting ? t('match.saving') : t('match.saveChanges')}
                 </button>
               </>
             )}
