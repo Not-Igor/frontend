@@ -1,4 +1,5 @@
 import apiService from './apiService';
+import { AuthenticationResponse } from './authService';
 
 export interface UserUpdateDto {
   newUsername?: string;
@@ -7,8 +8,8 @@ export interface UserUpdateDto {
 }
 
 class UserService {
-  async updateUserProfile(dto: UserUpdateDto): Promise<void> {
-    await apiService.put('/users/profile', dto);
+  async updateUserProfile(dto: UserUpdateDto): Promise<AuthenticationResponse> {
+    return await apiService.put('/users/profile', dto);
   }
 }
 

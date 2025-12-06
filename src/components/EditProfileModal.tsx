@@ -1,6 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import userService, { UserUpdateDto } from '../services/userService';
+import authService from '../services/authService';
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -45,7 +46,13 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, on
         return;
       }
       
-      await userService.updateUserProfile(dto);
+      const response = await userService.updateUserProfile(dto);
+
+      if (response.token) {
+        authService.setToken(response.token);
+        authService.setUser(response);
+      }
+      
       alert(t('profile.edit.success'));
       onUpdateSuccess();
       handleClose();
