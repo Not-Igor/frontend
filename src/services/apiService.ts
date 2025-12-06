@@ -41,7 +41,14 @@ class ApiService {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return await response.json();
+    // Check if response has content before parsing JSON
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return await response.json();
+    }
+    
+    // Return empty object for void responses
+    return {} as T;
   }
 
   async put<T>(endpoint: string, data: any): Promise<T> {
