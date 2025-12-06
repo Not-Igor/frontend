@@ -62,9 +62,6 @@ class MatchService {
     });
   }
 
-  async confirmScores(matchId: number): Promise<MatchDto> {
-    return await apiService.post<MatchDto>(`/matches/${matchId}/confirm`, {});
-  }
 }
 
 export default new MatchService();

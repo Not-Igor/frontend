@@ -7,8 +7,6 @@ interface MatchDetailsModalProps {
   onClose: () => void;
   match: MatchDto | null;
   onSubmitScores: (scores: Record<number, number>) => Promise<void>;
-  onConfirmScores: () => Promise<void>;
-  isCreator: boolean;
 }
 
 const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
@@ -16,11 +14,10 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
   onClose,
   match,
   onSubmitScores,
-  onConfirmScores,
-  isCreator,
 }) => {
   const [scores, setScores] = useState<Record<number, number>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (match && isOpen) {
@@ -38,6 +35,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
       }
       
       setScores(initialScores);
+      setIsEditing(false); // Reset editing state when modal opens
     }
   }, [match, isOpen]);
 
@@ -50,23 +48,11 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
     setIsSubmitting(true);
     try {
       await onSubmitScores(scores);
-      onClose();
+      setIsEditing(false);
+      // Don't close modal, just refresh
     } catch (error) {
       console.error('Failed to submit scores:', error);
       alert('Failed to submit scores');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleConfirm = async () => {
-    setIsSubmitting(true);
-    try {
-      await onConfirmScores();
-      onClose();
-    } catch (error) {
-      console.error('Failed to confirm scores:', error);
-      alert('Failed to confirm scores');
     } finally {
       setIsSubmitting(false);
     }
@@ -77,7 +63,8 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
   };
 
   const currentUser = authService.getCurrentUser();
-  const userHasConfirmed = match?.scores?.find(s => s.userId === currentUser?.id)?.confirmed;
+  const isParticipant = match?.participants.some(p => p.id === currentUser?.id);
+  const canEditScores = isParticipant && (match?.status === MatchStatus.IN_PROGRESS || (match?.status === MatchStatus.COMPLETED && isEditing));
 
   if (!isOpen || !match) return null;
 
@@ -106,15 +93,6 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
               </svg>
             </button>
           </div>
-
-          {/* Match Info */}
-          {match.status === MatchStatus.PENDING && (
-            <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">
-                This match hasn't started yet. The creator needs to start the match first.
-              </p>
-            </div>
-          )}
 
           {/* Scores Section */}
           <div className="mb-6">
@@ -151,7 +129,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                     </div>
                     
                     {/* Score input/display */}
-                    {isCreator && match.status === MatchStatus.IN_PROGRESS && !match.scoresSubmitted ? (
+                    {canEditScores ? (
                       <input
                         type="number"
                         min="0"
@@ -180,46 +158,47 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
               Close
             </button>
 
-            {/* Creator can submit scores */}
-            {isCreator && match.status === MatchStatus.IN_PROGRESS && !match.scoresSubmitted && (
+            {/* Participant can submit scores when match is IN_PROGRESS */}
+            {isParticipant && match.status === MatchStatus.IN_PROGRESS && (
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
                 className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
               >
-                {isSubmitting ? 'Saving...' : 'Save Scores'}
+                {isSubmitting ? 'Submitting...' : 'Submit Scores'}
               </button>
             )}
 
-            {/* Participants can confirm scores */}
-            {!isCreator && match.scoresSubmitted && !userHasConfirmed && match.status !== MatchStatus.COMPLETED && (
+            {/* Edit button when match is COMPLETED */}
+            {isParticipant && match.status === MatchStatus.COMPLETED && !isEditing && (
               <button
-                onClick={handleConfirm}
-                disabled={isSubmitting}
-                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                onClick={() => setIsEditing(true)}
+                className="flex-1 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
               >
-                {isSubmitting ? 'Confirming...' : 'Accept Scores'}
+                Edit Scores
               </button>
             )}
 
-            {/* Show completion message */}
-            {match.status === MatchStatus.COMPLETED && (
-              <div className="flex-1 px-4 py-2 bg-green-100 text-green-800 rounded-lg text-center font-medium">
-                Match Completed ✓
-              </div>
+            {/* Save edited scores */}
+            {isParticipant && match.status === MatchStatus.COMPLETED && isEditing && (
+              <>
+                <button
+                  onClick={() => setIsEditing(false)}
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Saving...' : 'Save Changes'}
+                </button>
+              </>
             )}
           </div>
-
-          {/* Info messages */}
-          {match.scoresSubmitted && match.status !== MatchStatus.COMPLETED && (
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-800">
-                {userHasConfirmed 
-                  ? "You've confirmed the scores. Waiting for other participants."
-                  : "Scores have been submitted. Please review and accept them."}
-              </p>
-            </div>
-          )}
         </div>
       </div>
     </div>

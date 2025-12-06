@@ -78,16 +78,10 @@ const CompetitionPage: React.FC = () => {
     if (!id) return;
     const matchesData = await matchService.getMatchesByCompetition(Number(id));
     setMatches(matchesData);
-  };
-
-  const handleConfirmScores = async () => {
-    if (!selectedMatch) return;
     
-    await matchService.confirmScores(selectedMatch.id);
-    
-    if (!id) return;
-    const matchesData = await matchService.getMatchesByCompetition(Number(id));
-    setMatches(matchesData);
+    // Reload the selected match to show updated data
+    const updatedMatch = await matchService.getMatch(selectedMatch.id);
+    setSelectedMatch(updatedMatch);
   };
 
   const getAvatarUrl = (username: string) => {
@@ -306,8 +300,6 @@ const CompetitionPage: React.FC = () => {
         }}
         match={selectedMatch}
         onSubmitScores={handleSubmitScores}
-        onConfirmScores={handleConfirmScores}
-        isCreator={isCreator}
       />
     </div>
   );
