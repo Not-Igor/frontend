@@ -227,12 +227,14 @@
     "alreadyParticipant": "al in competitie"
   },
   "filter": {
+    "title": "Filter & Sorteer",
     "filterByUser": "Filter op Gebruiker",
     "enterUsername": "Voer gebruikersnaam in...",
     "sortBy": "Sorteer op",
     "creationDate": "Aanmaakdatum",
     "alphabetical": "Alfabetisch",
     "ascending": "Oplopend",
-    "descending": "Aflopend"
+    "descending": "Aflopend",
+    "reset": "Filters resetten"
   }
 }

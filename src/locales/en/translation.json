@@ -227,12 +227,14 @@
     "alreadyParticipant": "already in competition"
   },
   "filter": {
+    "title": "Filter & Sort",
     "filterByUser": "Filter by User",
     "enterUsername": "Enter username...",
     "sortBy": "Sort by",
     "creationDate": "Creation Date",
     "alphabetical": "Alphabetical",
     "ascending": "Ascending",
-    "descending": "Descending"
+    "descending": "Descending",
+    "reset": "Reset Filters"
   }
 }
