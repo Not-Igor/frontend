@@ -209,8 +209,9 @@ const CompetitionPage: React.FC = () => {
         {/* Info Tab Content */}
         {activeTab === 'info' && (
           <>
-            {/* Create Match Button */}
-            {isCreator && (
+            {/* Create Match Button - Available for all participants */}
+            {competition && authService.getCurrentUser() && 
+             competition.participants.some(p => p.id === authService.getCurrentUser()?.id) && (
               <button
                 onClick={() => setIsCreateMatchModalOpen(true)}
                 className="w-full mb-6 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2 shadow-lg"
