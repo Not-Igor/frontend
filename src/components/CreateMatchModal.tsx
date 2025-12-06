@@ -38,14 +38,19 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
   };
 
   const handleCreate = async () => {
-    if (selectedParticipants.size < 2) {
+    // For 2-player competitions, auto-select both participants
+    const participantsToUse = participants.length === 2 
+      ? participants.map(p => p.id)
+      : Array.from(selectedParticipants);
+
+    if (participantsToUse.length < 2) {
       alert('Please select at least 2 participants');
       return;
     }
 
     setIsCreating(true);
     try {
-      await onCreateMatch(title, Array.from(selectedParticipants));
+      await onCreateMatch(title, participantsToUse);
       onClose();
     } catch (error) {
       console.error('Failed to create match:', error);
@@ -92,13 +97,14 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
             />
           </div>
 
-          {/* Participants Selection */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Select Participants ({selectedParticipants.size} selected)
-            </label>
-            <div className="space-y-2 max-h-60 overflow-y-auto">
-              {participants.map((participant) => (
+          {/* Participants Selection - Only show if more than 2 participants */}
+          {participants.length > 2 && (
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Participants ({selectedParticipants.size} selected)
+              </label>
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {participants.map((participant) => (
                 <div
                   key={participant.id}
                   onClick={() => handleToggleParticipant(participant.id)}
@@ -125,8 +131,18 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
                   </div>
                 </div>
               ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* Info message for 2-player competitions */}
+          {participants.length === 2 && (
+            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800">
+                All participants will automatically play in this match.
+              </p>
+            </div>
+          )}
 
           {/* Buttons */}
           <div className="flex space-x-3">
@@ -139,7 +155,7 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
             </button>
             <button
               onClick={handleCreate}
-              disabled={isCreating || selectedParticipants.size < 2}
+              disabled={isCreating || (participants.length > 2 && selectedParticipants.size < 2)}
               className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isCreating ? 'Creating...' : 'Start Match'}
