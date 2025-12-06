@@ -76,8 +76,14 @@ const CompetitionPage: React.FC = () => {
     await matchService.submitScores(selectedMatch.id, scores);
     
     if (!id) return;
+    
+    // Reload matches
     const matchesData = await matchService.getMatchesByCompetition(Number(id));
     setMatches(matchesData);
+    
+    // Reload participants to update scores/rankings
+    const participantsData = await competitionService.getParticipants(Number(id));
+    setParticipants(participantsData);
     
     // Reload the selected match to show updated data
     const updatedMatch = await matchService.getMatch(selectedMatch.id);
