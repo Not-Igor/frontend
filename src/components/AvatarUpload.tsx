@@ -8,6 +8,10 @@ interface AvatarUploadButtonProps {
 const AvatarUploadButton: React.FC<AvatarUploadButtonProps> = ({ onUploadSuccess, children }) => {
     
     const showWidget = () => {
+        if (!window.cloudinary) {
+            alert("Could not load the upload widget. This might be caused by an ad-blocker. Please disable it for this site and try again.");
+            return;
+        }
         // @ts-ignore
         const widget = window.cloudinary.createUploadWidget(
           {
