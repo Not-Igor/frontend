@@ -220,19 +220,7 @@ const NotificationDropdown: React.FC = () => {
             )}
           </div>
 
-          {notifications.length > 0 && (
-            <div className="p-3 border-t border-gray-200 text-center">
-              <button
-                onClick={() => {
-                  navigate('/notifications');
-                  setIsOpen(false);
-                }}
-                className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
-              >
-                View all notifications
-              </button>
-            </div>
-          )}
+
         </div>
       )}
     </div>
