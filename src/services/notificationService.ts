@@ -3,7 +3,8 @@ import apiService from './apiService';
 export enum NotificationType {
   FRIEND_REQUEST = 'FRIEND_REQUEST',
   MATCH_CREATED = 'MATCH_CREATED',
-  FRIEND_REQUEST_ACCEPTED = 'FRIEND_REQUEST_ACCEPTED'
+  FRIEND_REQUEST_ACCEPTED = 'FRIEND_REQUEST_ACCEPTED',
+  USER_LEFT_COMPETITION = 'USER_LEFT_COMPETITION'
 }
 
 export interface NotificationDto {

@@ -57,6 +57,14 @@ class CompetitionService {
   async deleteCompetition(competitionId: number): Promise<void> {
     return await apiService.delete(`/competitions/${competitionId}`);
   }
+
+  async addParticipants(competitionId: number, participantIds: number[]): Promise<CompetitionDto> {
+    return await apiService.post<CompetitionDto>(`/competitions/${competitionId}/participants`, { participantIds });
+  }
+
+  async leaveCompetition(competitionId: number): Promise<void> {
+    return await apiService.delete(`/competitions/${competitionId}/leave`);
+  }
 }
 
 export default new CompetitionService();

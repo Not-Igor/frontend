@@ -132,7 +132,21 @@
     "placeholder": {
       "title": "e.g., Weekend Football Challenge"
     },
-    "characterCount": "{{count}}/50 characters"
+    "characterCount": "{{count}}/50 characters",
+    "addFriends": "Add Friends",
+    "addButton": "Add",
+    "leave": "Leave Competition",
+    "confirmLeave": "Are you sure you want to leave this competition?",
+    "confirmDelete": "Are you sure you want to delete this competition? This action cannot be undone.",
+    "errors": {
+      "selectTitle": "Please enter a competition title",
+      "selectParticipant": "Please select at least one participant",
+      "loadFailed": "Failed to load competition",
+      "createFailed": "Failed to create competition. Please try again.",
+      "addFriendsFailed": "Failed to add friends. Please try again.",
+      "leaveFailed": "Failed to leave competition. Please try again.",
+      "deleteFailed": "Failed to delete competition. Please try again."
+    }
   },
   "match": {
     "create": "Create Match",
@@ -207,6 +221,7 @@
     "noFriends": "You don't have any friends yet. Add some friends first!",
     "selectedCount": "{{count}} participant selected",
     "selectedCount_plural": "{{count}} participants selected",
-    "clearAll": "Clear all"
+    "clearAll": "Clear all",
+    "alreadyParticipant": "already in competition"
   }
 }

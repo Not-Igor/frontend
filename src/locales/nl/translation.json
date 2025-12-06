@@ -132,7 +132,21 @@
     "placeholder": {
       "title": "bijv., Weekend Voetbal Uitdaging"
     },
-    "characterCount": "{{count}}/50 tekens"
+    "characterCount": "{{count}}/50 tekens",
+    "addFriends": "Vrienden Toevoegen",
+    "addButton": "Toevoegen",
+    "leave": "Competitie Verlaten",
+    "confirmLeave": "Weet je zeker dat je deze competitie wilt verlaten?",
+    "confirmDelete": "Weet je zeker dat je deze competitie wilt verwijderen? Dit kan niet ongedaan gemaakt worden.",
+    "errors": {
+      "selectTitle": "Voer een competitie titel in",
+      "selectParticipant": "Selecteer minimaal één deelnemer",
+      "loadFailed": "Competitie laden mislukt",
+      "createFailed": "Competitie aanmaken mislukt. Probeer het opnieuw.",
+      "addFriendsFailed": "Vrienden toevoegen mislukt. Probeer het opnieuw.",
+      "leaveFailed": "Competitie verlaten mislukt. Probeer het opnieuw.",
+      "deleteFailed": "Competitie verwijderen mislukt. Probeer het opnieuw."
+    }
   },
   "match": {
     "create": "Wedstrijd Aanmaken",
@@ -207,6 +221,7 @@
     "noFriends": "Je hebt nog geen vrienden. Voeg eerst wat vrienden toe!",
     "selectedCount": "{{count}} deelnemer geselecteerd",
     "selectedCount_plural": "{{count}} deelnemers geselecteerd",
-    "clearAll": "Alles wissen"
+    "clearAll": "Alles wissen",
+    "alreadyParticipant": "al in competitie"
   }
 }

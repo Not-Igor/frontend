@@ -13,9 +13,10 @@ interface User {
 interface UserSelectorProps {
   selectedUserIds: number[];
   onToggleUser: (userId: number) => void;
+  existingParticipantIds?: number[];
 }
 
-const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUser }) => {
+const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUser, existingParticipantIds = [] }) => {
   const { t } = useTranslation();
   const [friends, setFriends] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -85,21 +86,25 @@ const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUs
       <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-lg bg-white shadow-sm">
         {friends.map((friend) => {
           const isSelected = selectedUserIds.includes(friend.id);
+          const isExisting = existingParticipantIds.includes(friend.id);
           return (
             <div
               key={friend.id}
-              className={`flex items-center p-4 border-b last:border-b-0 cursor-pointer transition-all ${
-                isSelected 
-                  ? 'bg-indigo-50 hover:bg-indigo-100' 
-                  : 'bg-white hover:bg-gray-50'
+              className={`flex items-center p-4 border-b last:border-b-0 transition-all ${
+                isExisting
+                  ? 'bg-gray-100 opacity-50 cursor-not-allowed'
+                  : isSelected 
+                    ? 'bg-indigo-50 hover:bg-indigo-100 cursor-pointer' 
+                    : 'bg-white hover:bg-gray-50 cursor-pointer'
               }`}
-              onClick={() => onToggleUser(friend.id)}
+              onClick={() => !isExisting && onToggleUser(friend.id)}
             >
               <input
                 type="checkbox"
-                checked={isSelected}
-                onChange={() => onToggleUser(friend.id)}
-                className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer transition-all"
+                checked={isSelected || isExisting}
+                onChange={() => !isExisting && onToggleUser(friend.id)}
+                disabled={isExisting}
+                className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer transition-all disabled:cursor-not-allowed disabled:opacity-50"
                 onClick={(e) => e.stopPropagation()}
               />
               
@@ -109,12 +114,13 @@ const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserIds, onToggleUs
                 className="ml-3 h-10 w-10 rounded-full ring-2 ring-white shadow-sm"
               />
               
-              <label className="ml-3 block text-sm font-medium text-gray-900 cursor-pointer flex-grow">
+              <label className={`ml-3 block text-sm font-medium flex-grow ${isExisting ? 'text-gray-400 cursor-not-allowed' : 'text-gray-900 cursor-pointer'}`}>
                 {friend.username}
+                {isExisting && <span className="text-xs text-gray-400 ml-2">({t('userSelector.alreadyParticipant')})</span>}
               </label>
               
-              {isSelected && (
-                <svg className="h-5 w-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+              {(isSelected || isExisting) && (
+                <svg className={`h-5 w-5 ${isExisting ? 'text-gray-400' : 'text-indigo-600'}`} fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               )}
