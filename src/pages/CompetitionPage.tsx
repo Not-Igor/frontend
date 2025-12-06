@@ -20,6 +20,8 @@ const CompetitionPage: React.FC = () => {
   const [isCreateMatchModalOpen, setIsCreateMatchModalOpen] = useState(false);
   const [selectedMatch, setSelectedMatch] = useState<MatchDto | null>(null);
   const [isMatchDetailsOpen, setIsMatchDetailsOpen] = useState(false);
+  const [matchFilter, setMatchFilter] = useState<'all' | 'ongoing' | 'completed'>('all');
+  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
 
   useEffect(() => {
     if (!authService.isAuthenticated()) {
@@ -93,6 +95,30 @@ const CompetitionPage: React.FC = () => {
   const getAvatarUrl = (username: string) => {
     return `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
   };
+
+  const getFilteredAndSortedMatches = () => {
+    let filtered = matches;
+
+    // Filter by status
+    if (matchFilter === 'ongoing') {
+      filtered = matches.filter(m => m.status === 'IN_PROGRESS');
+    } else if (matchFilter === 'completed') {
+      filtered = matches.filter(m => m.status === 'COMPLETED');
+    }
+
+    // Sort by date
+    const sorted = [...filtered].sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+
+    return sorted;
+  };
+
+  const filteredMatches = getFilteredAndSortedMatches();
+  const ongoingMatchesCount = matches.filter(m => m.status === 'IN_PROGRESS').length;
+  const completedMatchesCount = matches.filter(m => m.status === 'COMPLETED').length;
 
   if (loading) {
     return (
@@ -241,28 +267,115 @@ const CompetitionPage: React.FC = () => {
         {/* Matches Tab Content */}
         {activeTab === 'matches' && (
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Matches ({matches.length})</h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-900">Matches ({matches.length})</h2>
+            </div>
+
+            {/* Filter and Sort Controls */}
+            {matches.length > 0 && (
+              <div className="flex flex-wrap gap-4 mb-6 pb-4 border-b border-gray-200">
+                {/* Status Filter */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setMatchFilter('all')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      matchFilter === 'all'
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    All ({matches.length})
+                  </button>
+                  <button
+                    onClick={() => setMatchFilter('ongoing')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      matchFilter === 'ongoing'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Ongoing ({ongoingMatchesCount})
+                  </button>
+                  <button
+                    onClick={() => setMatchFilter('completed')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      matchFilter === 'completed'
+                        ? 'bg-green-600 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Completed ({completedMatchesCount})
+                  </button>
+                </div>
+
+                {/* Date Sort - Only show for completed matches */}
+                {matchFilter === 'completed' && completedMatchesCount > 0 && (
+                  <div className="flex gap-2 ml-auto">
+                    <button
+                      onClick={() => setSortOrder('newest')}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                        sortOrder === 'newest'
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Newest First
+                    </button>
+                    <button
+                      onClick={() => setSortOrder('oldest')}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                        sortOrder === 'oldest'
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Oldest First
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
             {matches.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
                 <p>No matches yet. Create your first match!</p>
               </div>
+            ) : filteredMatches.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                <p>No {matchFilter} matches found.</p>
+              </div>
             ) : (
               <div className="space-y-3">
-                {matches.map((match) => (
+                {filteredMatches.map((match) => (
                   <div
                     key={match.id}
                     onClick={() => handleMatchClick(match)}
-                    className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                    className={`p-4 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer border-2 ${
+                      match.status === 'COMPLETED' 
+                        ? 'bg-green-50 border-green-200' 
+                        : 'bg-blue-50 border-blue-200'
+                    }`}
                   >
                     <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-bold text-gray-900">{match.title}</h3>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-bold text-gray-900">{match.title}</h3>
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                            match.status === 'COMPLETED'
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-blue-100 text-blue-800'
+                          }`}>
+                            {match.status === 'COMPLETED' ? 'Completed' : 'Ongoing'}
+                          </span>
+                        </div>
                         <p className="text-sm text-gray-500">
-                          {match.participants.length} participants • {match.status}
-                          {match.scoresSubmitted && match.status !== 'COMPLETED' && (
-                            <span className="ml-2 text-blue-600">• Scores pending</span>
-                          )}
+                          {match.participants.length} participants
                         </p>
+                        {match.status === 'COMPLETED' && (
+                          <p className="text-xs text-gray-400 mt-1">
+                            Completed on {new Date(match.updatedAt).toLocaleDateString()} at {new Date(match.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        )}
                       </div>
                       <div className="flex space-x-2">
                         {match.participants.slice(0, 3).map((participant) => (
