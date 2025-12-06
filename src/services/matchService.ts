@@ -13,6 +13,13 @@ export interface MatchCreateRequest {
   participantIds: number[];
 }
 
+export interface MatchScoreDto {
+  userId: number;
+  username: string;
+  score: number;
+  confirmed: boolean;
+}
+
 export interface MatchDto {
   id: number;
   title: string;
@@ -23,6 +30,8 @@ export interface MatchDto {
   startedAt: string | null;
   createdAt: string;
   updatedAt: string;
+  scores: MatchScoreDto[];
+  scoresSubmitted: boolean;
 }
 
 class MatchService {
@@ -44,6 +53,17 @@ class MatchService {
 
   async deleteMatch(matchId: number): Promise<void> {
     return await apiService.delete(`/matches/${matchId}`);
+  }
+
+  async submitScores(matchId: number, scores: Record<number, number>): Promise<MatchDto> {
+    return await apiService.post<MatchDto>(`/matches/${matchId}/scores`, {
+      matchId,
+      scores
+    });
+  }
+
+  async confirmScores(matchId: number): Promise<MatchDto> {
+    return await apiService.post<MatchDto>(`/matches/${matchId}/confirm`, {});
   }
 }
 

@@ -4,6 +4,7 @@ import authService from '../services/authService';
 import competitionService, { CompetitionDto, ParticipantDto } from '../services/competitionService';
 import matchService, { MatchDto } from '../services/matchService';
 import CreateMatchModal from '../components/CreateMatchModal';
+import MatchDetailsModal from '../components/MatchDetailsModal';
 
 type TabType = 'info' | 'matches';
 
@@ -17,6 +18,8 @@ const CompetitionPage: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabType>('info');
   const [isCreateMatchModalOpen, setIsCreateMatchModalOpen] = useState(false);
+  const [selectedMatch, setSelectedMatch] = useState<MatchDto | null>(null);
+  const [isMatchDetailsOpen, setIsMatchDetailsOpen] = useState(false);
 
   useEffect(() => {
     if (!authService.isAuthenticated()) {
@@ -56,6 +59,33 @@ const CompetitionPage: React.FC = () => {
       participantIds,
     });
     
+    const matchesData = await matchService.getMatchesByCompetition(Number(id));
+    setMatches(matchesData);
+  };
+
+  const handleMatchClick = async (match: MatchDto) => {
+    // Reload match data to get latest scores
+    const updatedMatch = await matchService.getMatch(match.id);
+    setSelectedMatch(updatedMatch);
+    setIsMatchDetailsOpen(true);
+  };
+
+  const handleSubmitScores = async (scores: Record<number, number>) => {
+    if (!selectedMatch) return;
+    
+    await matchService.submitScores(selectedMatch.id, scores);
+    
+    if (!id) return;
+    const matchesData = await matchService.getMatchesByCompetition(Number(id));
+    setMatches(matchesData);
+  };
+
+  const handleConfirmScores = async () => {
+    if (!selectedMatch) return;
+    
+    await matchService.confirmScores(selectedMatch.id);
+    
+    if (!id) return;
     const matchesData = await matchService.getMatchesByCompetition(Number(id));
     setMatches(matchesData);
   };
@@ -221,13 +251,17 @@ const CompetitionPage: React.FC = () => {
                 {matches.map((match) => (
                   <div
                     key={match.id}
-                    className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                    onClick={() => handleMatchClick(match)}
+                    className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
                   >
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-bold text-gray-900">{match.title}</h3>
                         <p className="text-sm text-gray-500">
                           {match.participants.length} participants • {match.status}
+                          {match.scoresSubmitted && match.status !== 'COMPLETED' && (
+                            <span className="ml-2 text-blue-600">• Scores pending</span>
+                          )}
                         </p>
                       </div>
                       <div className="flex space-x-2">
@@ -261,6 +295,19 @@ const CompetitionPage: React.FC = () => {
         onCreateMatch={handleCreateMatch}
         participants={participants}
         matchNumber={matches.length + 1}
+      />
+
+      {/* Match Details Modal */}
+      <MatchDetailsModal
+        isOpen={isMatchDetailsOpen}
+        onClose={() => {
+          setIsMatchDetailsOpen(false);
+          setSelectedMatch(null);
+        }}
+        match={selectedMatch}
+        onSubmitScores={handleSubmitScores}
+        onConfirmScores={handleConfirmScores}
+        isCreator={isCreator}
       />
     </div>
   );
