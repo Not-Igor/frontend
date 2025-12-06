@@ -53,7 +53,8 @@
       "confirmNewPassword": "Bevestig Nieuw Wachtwoord",
       "passwordSection": "Om je wachtwoord te wijzigen, vul je de onderstaande velden in.",
       "success": "Profiel succesvol bijgewerkt!",
-      "error": "Profiel bijwerken mislukt."
+      "error": "Profiel bijwerken mislukt.",
+      "avatarError": "Avatar bijwerken mislukt."
     }
   },
   "friends": {

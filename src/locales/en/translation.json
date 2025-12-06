@@ -53,7 +53,8 @@
       "confirmNewPassword": "Confirm New Password",
       "passwordSection": "To change your password, please fill in the fields below.",
       "success": "Profile updated successfully!",
-      "error": "Failed to update profile."
+      "error": "Failed to update profile.",
+      "avatarError": "Failed to update avatar."
     }
   },
   "friends": {
