@@ -248,7 +248,7 @@ const CompetitionPage: React.FC = () => {
                       </div>
                       <span className="font-medium text-gray-900">{participant.username}</span>
                     </div>
-                    <span className="text-2xl font-bold text-indigo-600">{participant.score}</span>
+                    <span className="text-2xl font-bold text-indigo-600">{participant.wins}</span>
                   </div>
                 ))}
               </div>
@@ -257,9 +257,75 @@ const CompetitionPage: React.FC = () => {
             {/* Leaderboard */}
             <div className="bg-white rounded-lg shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Leaderboard</h2>
-              <div className="text-center py-8 text-gray-500">
-                <p>No scores yet. Start competing!</p>
-              </div>
+              {participants.length === 0 || participants.every(p => p.matchesPlayed === 0) ? (
+                <div className="text-center py-8 text-gray-500">
+                  <p>No matches completed yet. Start competing!</p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b-2 border-gray-200">
+                        <th className="text-left py-3 px-2 text-sm font-semibold text-gray-600">#</th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Player</th>
+                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">MP</th>
+                        <th className="text-center py-3 px-3 text-sm font-semibold text-indigo-600">W</th>
+                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">D</th>
+                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">L</th>
+                        <th className="text-center py-3 px-3 text-sm font-semibold text-gray-600">PS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {participants.map((participant, index) => (
+                        <tr 
+                          key={participant.id}
+                          className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${
+                            index < 3 ? 'bg-yellow-50' : ''
+                          }`}
+                        >
+                          <td className="py-3 px-2">
+                            <div className="flex items-center">
+                              {index < 3 ? (
+                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white ${
+                                  index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : 'bg-orange-400'
+                                }`}>
+                                  {index + 1}
+                                </div>
+                              ) : (
+                                <span className="text-gray-500 font-medium">{index + 1}</span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="py-3 px-4">
+                            <div className="flex items-center space-x-3">
+                              <img
+                                src={getAvatarUrl(participant.username)}
+                                alt={participant.username}
+                                className="w-8 h-8 rounded-full"
+                              />
+                              <span className="font-medium text-gray-900">{participant.username}</span>
+                            </div>
+                          </td>
+                          <td className="py-3 px-3 text-center text-gray-700">{participant.matchesPlayed}</td>
+                          <td className="py-3 px-3 text-center">
+                            <span className="font-bold text-indigo-600 text-lg">{participant.wins}</span>
+                          </td>
+                          <td className="py-3 px-3 text-center text-gray-700">{participant.draws}</td>
+                          <td className="py-3 px-3 text-center text-gray-700">{participant.losses}</td>
+                          <td className="py-3 px-3 text-center text-gray-700">{participant.pointsScored}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="mt-4 text-xs text-gray-500 flex flex-wrap gap-x-4 gap-y-1">
+                    <span><strong>MP:</strong> Matches Played</span>
+                    <span><strong>W:</strong> Wins</span>
+                    <span><strong>D:</strong> Draws</span>
+                    <span><strong>L:</strong> Losses</span>
+                    <span><strong>PS:</strong> Points Scored</span>
+                  </div>
+                </div>
+              )}
             </div>
           </>
         )}

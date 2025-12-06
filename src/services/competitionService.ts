@@ -26,7 +26,11 @@ export interface CompetitionDto {
 export interface ParticipantDto {
   id: number;
   username: string;
-  score: number;
+  wins: number;
+  matchesPlayed: number;
+  draws: number;
+  losses: number;
+  pointsScored: number;
 }
 
 class CompetitionService {
