@@ -43,6 +43,17 @@
     "language": {
       "title": "Taal",
       "select": "Selecteer Taal"
+    },
+    "edit": {
+      "title": "Profiel Bewerken",
+      "button": "Profiel Bewerken",
+      "username": "Nieuwe Gebruikersnaam",
+      "currentPassword": "Huidig Wachtwoord",
+      "newPassword": "Nieuw Wachtwoord",
+      "confirmNewPassword": "Bevestig Nieuw Wachtwoord",
+      "passwordSection": "Om je wachtwoord te wijzigen, vul je de onderstaande velden in.",
+      "success": "Profiel succesvol bijgewerkt!",
+      "error": "Profiel bijwerken mislukt."
     }
   },
   "friends": {
