@@ -5,6 +5,7 @@ import UserSearchBar from '../components/UserSearchBar';
 import UserSearchResult from '../components/UserSearchResult';
 import UserSearchDropdown from '../components/UserSearchDropdown';
 import FriendRequestList from '../components/FriendRequestList';
+import SentFriendRequestList from '../components/SentFriendRequestList';
 import FriendsList from '../components/FriendsList';
 import authService from '../services/authService';
 import friendService, { UserSearchResult as UserSearchResultType, FriendRequest } from '../services/friendService';
@@ -22,10 +23,12 @@ const FriendsPage: React.FC = () => {
   const [searchResults, setSearchResults] = useState<UserSearchResultType[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserSearchResultType | null>(null);
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
+  const [sentRequests, setSentRequests] = useState<FriendRequest[]>([]);
   const [friends, setFriends] = useState<Friend[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isResponding, setIsResponding] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
   const [isLoadingFriends, setIsLoadingFriends] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -36,6 +39,7 @@ const FriendsPage: React.FC = () => {
       return;
     }
     loadFriendRequests();
+    loadSentRequests();
     loadFriends();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
@@ -49,6 +53,18 @@ const FriendsPage: React.FC = () => {
       setFriendRequests(requests);
     } catch (err) {
       console.error('Failed to load friend requests:', err);
+    }
+  };
+
+  const loadSentRequests = async () => {
+    const user = authService.getUser();
+    if (!user) return;
+    
+    try {
+      const requests = await friendService.getSentRequests(user.id);
+      setSentRequests(requests);
+    } catch (err) {
+      console.error('Failed to load sent requests:', err);
     }
   };
 
@@ -156,6 +172,24 @@ const FriendsPage: React.FC = () => {
     }
   };
 
+  const handleCancelRequest = async (requestId: number) => {
+    const user = authService.getUser();
+    if (!user) return;
+
+    setIsCancelling(true);
+    try {
+      await friendService.cancelFriendRequest(requestId, user.id);
+      await loadSentRequests();
+      setSuccessMessage('Vriendschapsverzoek geannuleerd');
+      setTimeout(() => setSuccessMessage(null), 3000);
+    } catch (err: any) {
+      setError(err.message || 'Kon vriendschapsverzoek niet annuleren');
+      setTimeout(() => setError(null), 3000);
+    } finally {
+      setIsCancelling(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -197,7 +231,7 @@ const FriendsPage: React.FC = () => {
         </div>
 
         {/* Friend Requests Section */}
-        <div>
+        <div className="mb-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             {t('friends.requests.title')} ({friendRequests.length})
           </h2>
@@ -207,6 +241,20 @@ const FriendsPage: React.FC = () => {
             isResponding={isResponding}
           />
         </div>
+
+        {/* Sent Requests Section */}
+        {sentRequests.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Pending Requests ({sentRequests.length})
+            </h2>
+            <SentFriendRequestList
+              requests={sentRequests}
+              onCancel={handleCancelRequest}
+              isCancelling={isCancelling}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

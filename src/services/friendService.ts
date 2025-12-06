@@ -105,6 +105,39 @@ const friendService = {
 
     return response.json();
   },
+
+  getSentRequests: async (userId: number): Promise<FriendRequest[]> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/friends/sent/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch sent requests');
+    }
+
+    return response.json();
+  },
+
+  cancelFriendRequest: async (requestId: number, userId: number): Promise<void> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/friends/cancel/${requestId}/${userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Failed to cancel friend request');
+    }
+  },
 };
 
 export default friendService;
