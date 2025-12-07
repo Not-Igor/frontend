@@ -12,8 +12,10 @@ class UserService {
     return await apiService.put('/users/profile', dto);
   }
 
-  async updateAvatar(avatarUrl: string): Promise<void> {
-    await apiService.put('/users/profile/avatar', { avatarUrl });
+  async updateAvatar(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return await apiService.post('/users/profile/avatar', formData);
   }
 }
 

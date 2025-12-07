@@ -57,12 +57,9 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleAvatarUpload = async (url: string) => {
-    try {
-      await userService.updateAvatar(url);
-      fetchProfile();
-    } catch (err) {
-      alert(t('profile.edit.avatarError'));
-    }
+    // The AvatarUploadButton already handled the upload to the backend.
+    // We just need to refetch the profile to update the displayed avatar.
+    fetchProfile();
   };
 
   if (loading) {

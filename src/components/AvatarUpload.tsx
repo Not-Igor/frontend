@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef, ChangeEvent } from 'react';
+import userService from '../services/userService'; // Import userService
 
 interface AvatarUploadButtonProps {
     onUploadSuccess: (url: string) => void;
@@ -6,54 +7,37 @@ interface AvatarUploadButtonProps {
 }
 
 const AvatarUploadButton: React.FC<AvatarUploadButtonProps> = ({ onUploadSuccess, children }) => {
-    
-    const showWidget = () => {
-        if (!window.cloudinary) {
-            alert("Could not load the upload widget. This might be caused by an ad-blocker. Please disable it for this site and try again.");
-            return;
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files.length > 0) {
+            const file = event.target.files[0];
+            try {
+                const imageUrl = await userService.updateAvatar(file);
+                onUploadSuccess(imageUrl);
+            } catch (error) {
+                console.error("Error uploading avatar:", error);
+                // Optionally show an error message to the user
+            }
         }
-        // @ts-ignore
-        const widget = window.cloudinary.createUploadWidget(
-          {
-            cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
-            uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET,
-            cropping: true,
-            croppingAspectRatio: 1,
-            showAdvancedOptions: false,
-            sources: ['local', 'url', 'camera'],
-            styles: {
-              palette: {
-                window: '#FFFFFF',
-                windowBorder: '#90A0B3',
-                tabIcon: '#0078FF',
-                menuIcons: '#5A616A',
-                textDark: '#000000',
-                textLight: '#FFFFFF',
-                link: '#0078FF',
-                action: '#FF620C',
-                inactiveTabIcon: '#B3B3B3',
-                error: '#F44235',
-                inProgress: '#0078FF',
-                complete: '#20B832',
-                sourceBg: '#E4EBF1'
-              }
-            }
-          },
-          (error: any, result: any) => {
-            if (!error && result && result.event === 'success') {
-              onUploadSuccess(result.info.secure_url);
-            }
-          }
-        );
-        widget.open();
-      };
+    };
+
+    const handleChildrenClick = () => {
+        fileInputRef.current?.click();
+    };
 
     return (
-        <div onClick={showWidget} className="cursor-pointer">
+        <div onClick={handleChildrenClick} className="cursor-pointer">
+            <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+            />
             {children}
         </div>
     );
 };
-
 
 export default AvatarUploadButton;
