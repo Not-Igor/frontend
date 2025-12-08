@@ -150,8 +150,10 @@
     "addFriends": "Add Friends",
     "addButton": "Add",
     "leave": "Leave Competition",
-    "confirmLeave": "Are you sure you want to leave this competition?",
-    "confirmDelete": "Are you sure you want to delete this competition? This action cannot be undone.",
+    "confirmLeave": "Leave Competition",
+    "confirmLeaveMessage": "Are you sure you want to leave this competition?",
+    "confirmDelete": "Delete Competition",
+    "confirmDeleteMessage": "Are you sure you want to delete this competition? This action cannot be undone.",
     "errors": {
       "selectTitle": "Please enter a competition title",
       "selectParticipant": "Please select at least one participant",

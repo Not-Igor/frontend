@@ -150,8 +150,10 @@
     "addFriends": "Vrienden Toevoegen",
     "addButton": "Toevoegen",
     "leave": "Competitie Verlaten",
-    "confirmLeave": "Weet je zeker dat je deze competitie wilt verlaten?",
-    "confirmDelete": "Weet je zeker dat je deze competitie wilt verwijderen? Dit kan niet ongedaan gemaakt worden.",
+    "confirmLeave": "Competitie Verlaten",
+    "confirmLeaveMessage": "Weet je zeker dat je deze competitie wilt verlaten?",
+    "confirmDelete": "Competitie Verwijderen",
+    "confirmDeleteMessage": "Weet je zeker dat je deze competitie wilt verwijderen? Dit kan niet ongedaan gemaakt worden.",
     "errors": {
       "selectTitle": "Voer een competitie titel in",
       "selectParticipant": "Selecteer minimaal één deelnemer",

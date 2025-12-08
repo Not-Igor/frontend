@@ -7,6 +7,7 @@ import matchService, { MatchDto } from '../services/matchService';
 import CreateMatchModal from '../components/CreateMatchModal';
 import MatchDetailsModal from '../components/MatchDetailsModal';
 import AddFriendsModal from '../components/AddFriendsModal';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 type TabType = 'info' | 'matches';
 
@@ -27,6 +28,10 @@ const CompetitionPage: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAddFriendsModalOpen, setIsAddFriendsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
     if (!authService.isAuthenticated()) {
@@ -113,28 +118,30 @@ const CompetitionPage: React.FC = () => {
   const handleLeaveCompetition = async () => {
     if (!id) return;
     
-    if (!window.confirm(t('competition.confirmLeave'))) return;
-    
+    setIsLeaving(true);
     try {
       await competitionService.leaveCompetition(Number(id));
       navigate('/home');
     } catch (err: any) {
       console.error('Failed to leave competition:', err);
       setError(t('competition.errors.leaveFailed'));
+      setIsLeaving(false);
+      setIsLeaveModalOpen(false);
     }
   };
 
   const handleDeleteCompetition = async () => {
     if (!id) return;
     
-    if (!window.confirm(t('competition.confirmDelete'))) return;
-    
+    setIsDeleting(true);
     try {
       await competitionService.deleteCompetition(Number(id));
       navigate('/home');
     } catch (err: any) {
       console.error('Failed to delete competition:', err);
       setError(t('competition.errors.deleteFailed'));
+      setIsDeleting(false);
+      setIsDeleteModalOpen(false);
     }
   };
 
@@ -247,7 +254,7 @@ const CompetitionPage: React.FC = () => {
                       <button
                         onClick={() => {
                           setIsSettingsOpen(false);
-                          handleDeleteCompetition();
+                          setIsDeleteModalOpen(true);
                         }}
                         className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 transition-colors flex items-center space-x-2"
                       >
@@ -260,7 +267,7 @@ const CompetitionPage: React.FC = () => {
                       <button
                         onClick={() => {
                           setIsSettingsOpen(false);
-                          handleLeaveCompetition();
+                          setIsLeaveModalOpen(true);
                         }}
                         className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 transition-colors flex items-center space-x-2"
                       >
@@ -608,6 +615,28 @@ const CompetitionPage: React.FC = () => {
         onClose={() => setIsAddFriendsModalOpen(false)}
         onAddFriends={handleAddFriends}
         existingParticipantIds={participants.map(p => p.id)}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeleteCompetition}
+        title={t('competition.confirmDelete')}
+        message={t('competition.confirmDeleteMessage')}
+        confirmText={t('common.delete')}
+        isLoading={isDeleting}
+      />
+
+      {/* Leave Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isLeaveModalOpen}
+        onClose={() => setIsLeaveModalOpen(false)}
+        onConfirm={handleLeaveCompetition}
+        title={t('competition.confirmLeave')}
+        message={t('competition.confirmLeaveMessage')}
+        confirmText={t('competition.leave')}
+        isLoading={isLeaving}
       />
     </div>
   );
