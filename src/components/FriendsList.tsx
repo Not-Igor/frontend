@@ -50,7 +50,7 @@ const FriendsList: React.FC<FriendsListProps> = ({ friends, isLoading }) => {
       <div className="max-h-96 overflow-y-auto">
         <div className="divide-y divide-gray-200">
           {friends.map((friend) => {
-            const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${friend.username}`;
+            const avatarUrl = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${friend.username}`;
             
             return (
               <div

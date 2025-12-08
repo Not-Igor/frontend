@@ -32,7 +32,7 @@ const UserSearchDropdown: React.FC<UserSearchDropdownProps> = ({ users, onSelect
   return (
     <div className="absolute left-0 right-0 z-10 bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-64 overflow-y-auto">
       {users.map((user) => {
-        const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username}`;
+        const avatarUrl = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${user.username}`;
         
         return (
           <div

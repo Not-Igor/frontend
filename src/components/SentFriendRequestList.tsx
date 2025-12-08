@@ -13,7 +13,7 @@ const SentFriendRequestList: React.FC<SentFriendRequestListProps> = ({
   isCancelling,
 }) => {
   const getAvatarUrl = (username: string) => {
-    return `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
+    return `https://api.dicebear.com/7.x/pixel-art/svg?seed=${username}`;
   };
 
   if (requests.length === 0) {

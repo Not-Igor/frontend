@@ -21,7 +21,7 @@ const FriendRequestList: React.FC<FriendRequestListProps> = ({ requests, onRespo
   return (
     <div className="space-y-4">
       {requests.map((request) => {
-        const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${request.senderUsername}`;
+        const avatarUrl = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${request.senderUsername}`;
         
         return (
           <div key={request.requestId} className="bg-white rounded-lg shadow-md p-4">

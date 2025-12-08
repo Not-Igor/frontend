@@ -61,7 +61,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
   };
 
   const getAvatarUrl = (username: string) => {
-    return `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
+    return `https://api.dicebear.com/7.x/pixel-art/svg?seed=${username}`;
   };
 
   const currentUser = authService.getCurrentUser();

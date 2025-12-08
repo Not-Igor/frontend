@@ -63,7 +63,7 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
   };
 
   const getAvatarUrl = (username: string) => {
-    return `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
+    return `https://api.dicebear.com/7.x/pixel-art/svg?seed=${username}`;
   };
 
   if (!isOpen) return null;

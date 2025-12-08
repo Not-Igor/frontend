@@ -8,7 +8,7 @@ interface UserSearchResultProps {
 }
 
 const UserSearchResult: React.FC<UserSearchResultProps> = ({ user, onSendRequest, isSending }) => {
-  const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username}`;
+  const avatarUrl = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${user.username}`;
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-4">
