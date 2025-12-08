@@ -2,6 +2,7 @@ import React, { useState, FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import userService, { UserUpdateDto } from '../services/userService';
 import authService from '../services/authService';
+import { useToast } from './Toast/ToastProvider'; // Import useToast
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface EditProfileModalProps {
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, onUpdateSuccess }) => {
   const { t } = useTranslation();
+  const { addToast } = useToast(); // Use the useToast hook
   const [newUsername, setNewUsername] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -53,10 +55,11 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, on
         authService.setUser(response);
       }
       
-      alert(t('profile.edit.success'));
+      addToast(t('profile.edit.success'), 'success'); // Replaced alert with addToast
       onUpdateSuccess();
       handleClose();
     } catch (err: any) {
+      addToast(err.message || t('profile.edit.error'), 'error'); // Display error toast
       setError(err.message || t('profile.edit.error'));
     } finally {
       setLoading(false);
