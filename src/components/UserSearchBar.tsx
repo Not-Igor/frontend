@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 
 interface UserSearchBarProps {
   onSearch: (username: string) => void;
+  onSearchTermChange?: (term: string) => void;
   isLoading: boolean;
 }
 
-const UserSearchBar: React.FC<UserSearchBarProps> = ({ onSearch, isLoading }) => {
+const UserSearchBar: React.FC<UserSearchBarProps> = ({ onSearch, onSearchTermChange, isLoading }) => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const previousSearchRef = useRef<string>('');
@@ -14,7 +15,8 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ onSearch, isLoading }) =>
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
-  }, []);
+    onSearchTermChange?.(value);
+  }, [onSearchTermChange]);
 
   // Debounce effect - only search if value actually changed
   useEffect(() => {

@@ -31,7 +31,9 @@ const FriendsPage: React.FC = () => {
   const [isCancelling, setIsCancelling] = useState(false);
   const [isLoadingFriends, setIsLoadingFriends] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchError, setSearchError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
     if (!authService.isAuthenticated()) {
@@ -88,25 +90,29 @@ const FriendsPage: React.FC = () => {
     if (!user) return;
 
     setIsSearching(true);
-    setError(null);
-    setSuccessMessage(null);
+    setSearchError(null);
     setSearchResults([]);
     setSelectedUser(null);
 
     try {
       const foundUsers = await friendService.searchUser(searchUsername);
       
-      // Filter out self from results
-      const filteredUsers = foundUsers.filter(u => u.username !== user.username);
+      // Get friend IDs for filtering
+      const friendIds = friends.map(f => f.id);
+      
+      // Filter out self and existing friends from results
+      const filteredUsers = foundUsers.filter(u => 
+        u.username !== user.username && !friendIds.includes(u.id)
+      );
       
       if (filteredUsers.length === 0) {
-        setError('Geen gebruikers gevonden');
+        setSearchError('Geen gebruikers gevonden');
         return;
       }
       
       setSearchResults(filteredUsers);
     } catch (err: any) {
-      setError(err.message || 'Geen gebruikers gevonden');
+      setSearchError(err.message || 'Geen gebruikers gevonden');
     } finally {
       setIsSearching(false);
     }
@@ -115,6 +121,14 @@ const FriendsPage: React.FC = () => {
   const handleSelectUser = (user: UserSearchResultType) => {
     setSelectedUser(user);
     setSearchResults([]);
+  };
+
+  const handleSearchTermChange = (term: string) => {
+    setSearchTerm(term);
+    if (term.trim().length === 0) {
+      setSearchError(null);
+      setSearchResults([]);
+    }
   };
 
   // Close dropdown when clicking outside - just like MovieSearchBar
@@ -219,8 +233,16 @@ const FriendsPage: React.FC = () => {
         <div className="mb-12">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('friends.searchUsers')}</h2>
           <div ref={searchContainerRef} className="relative">
-            <UserSearchBar onSearch={handleSearch} isLoading={isSearching} />
-            <UserSearchDropdown users={searchResults} onSelectUser={handleSelectUser} />
+            <UserSearchBar 
+              onSearch={handleSearch} 
+              onSearchTermChange={handleSearchTermChange}
+              isLoading={isSearching} 
+            />
+            <UserSearchDropdown 
+              users={searchResults} 
+              onSelectUser={handleSelectUser}
+              searchError={searchTerm.trim().length >= 2 ? searchError : null}
+            />
           </div>
           
           {selectedUser && (
