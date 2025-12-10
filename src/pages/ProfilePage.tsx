@@ -5,6 +5,7 @@ import authService from '../services/authService';
 import apiService from '../services/apiService';
 import LanguageSelector from '../components/LanguageSelector';
 import EditProfileModal from '../components/EditProfileModal';
+import UserInfoCard from '../components/UserInfoCard';
 
 interface UserProfile {
   id: number;
@@ -56,7 +57,7 @@ const ProfilePage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center">
+      <div className="min-h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">{t('common.loading')}</div>
       </div>
     );
@@ -64,28 +65,20 @@ const ProfilePage: React.FC = () => {
 
   if (error || !profile) {
     return (
-      <div className="h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center">
+      <div className="min-h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center">
         <div className="text-red-600">{error || t('common.error')}</div>
       </div>
     );
   }
 
   return (
-    <div className="h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
-        <div className="flex flex-col items-center">
-          <img
-            src={profile.avatarUrl}
-            alt={`${profile.username} avatar`}
-            className="w-32 h-32 rounded-full border-4 border-indigo-500 mb-4"
-          />
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {profile.username}
-          </h2>
-          <span className="inline-block bg-indigo-100 text-indigo-800 text-xs px-3 py-1 rounded-full mb-6">
-            {profile.role}
-          </span>
-        </div>
+    <div className="min-h-[calc(100vh-4rem)] bg-gray-50 py-8 px-4">
+      <div className="max-w-md mx-auto w-full bg-white rounded-lg shadow-lg p-8">
+        <UserInfoCard
+          avatarUrl={profile.avatarUrl}
+          username={profile.username}
+          role={profile.role}
+        />
 
         <div className="space-y-6">
           <div className="border-t border-gray-200 pt-4">
