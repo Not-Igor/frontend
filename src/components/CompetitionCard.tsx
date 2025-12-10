@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CompetitionDto } from '../services/competitionService';
+import { getDaysAgo } from '../utils/dateUtils';
 
 interface CompetitionCardProps {
   competition: CompetitionDto;
@@ -13,18 +14,6 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({ competition }) => {
 
   const getAvatarUrl = (username: string) => {
     return `https://api.dicebear.com/7.x/pixel-art/svg?seed=${username}`;
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-    if (days === 0) return t('date.today');
-    if (days === 1) return t('date.yesterday');
-    if (days < 7) return t('date.daysAgo', { count: days });
-    return date.toLocaleDateString();
   };
 
   return (
@@ -42,7 +31,7 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({ competition }) => {
               {competition.title}
             </h3>
             <p className="text-sm text-gray-500 mt-1">
-              {t('competition.createdBy', { creator: competition.creator.username, date: formatDate(competition.createdAt) })}
+              {t('competition.createdBy', { creator: competition.creator.username, date: getDaysAgo(competition.createdAt, t) })}
             </p>
           </div>
         </div>

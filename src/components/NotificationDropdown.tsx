@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import notificationService, { NotificationDto, NotificationType } from '../services/notificationService';
+import { getRelativeTime } from '../utils/dateUtils';
 
 const NotificationDropdown: React.FC = () => {
   const { t } = useTranslation();
@@ -145,20 +146,7 @@ const NotificationDropdown: React.FC = () => {
     }
   };
 
-  const getTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-    if (seconds < 60) return t('notifications.justNow');
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return t('notifications.minutesAgo', { count: minutes });
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return t('notifications.hoursAgo', { count: hours });
-    const days = Math.floor(hours / 24);
-    if (days < 7) return t('notifications.daysAgo', { count: days });
-    return date.toLocaleDateString();
-  };
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -214,7 +202,7 @@ const NotificationDropdown: React.FC = () => {
                     {getIcon(notification.type)}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-gray-900">{notification.message}</p>
-                      <p className="text-xs text-gray-500 mt-1">{getTimeAgo(notification.createdAt)}</p>
+                      <p className="text-xs text-gray-500 mt-1">{getRelativeTime(notification.createdAt, t)}</p>
                     </div>
                   </div>
                 </div>

@@ -8,6 +8,7 @@ import CreateMatchModal from '../components/CreateMatchModal';
 import MatchDetailsModal from '../components/MatchDetailsModal';
 import AddFriendsModal from '../components/AddFriendsModal';
 import ConfirmationModal from '../components/ConfirmationModal';
+import { formatLocalDate, formatLocalTime } from '../utils/dateUtils';
 
 type TabType = 'info' | 'matches';
 
@@ -288,7 +289,7 @@ const CompetitionPage: React.FC = () => {
             <div>
               <h1 className="text-3xl font-bold text-gray-900">{competition.title}</h1>
               <p className="text-gray-500 mt-1">
-                {t('competition.createdByOn', { creator: competition.creator.username, date: new Date(competition.createdAt).toLocaleDateString() })}
+                {t('competition.createdByOn', { creator: competition.creator.username, date: formatLocalDate(competition.createdAt) })}
               </p>
             </div>
           </div>
@@ -559,8 +560,8 @@ const CompetitionPage: React.FC = () => {
                         {match.status === 'COMPLETED' && (
                           <p className="text-xs text-gray-400 mt-1">
                             {t('match.completedOn', { 
-                              date: new Date(match.updatedAt).toLocaleDateString(), 
-                              time: new Date(match.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                              date: formatLocalDate(match.updatedAt), 
+                              time: formatLocalTime(match.updatedAt)
                             })}
                           </p>
                         )}
