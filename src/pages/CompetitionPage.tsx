@@ -72,10 +72,18 @@ const CompetitionPage: React.FC = () => {
   const handleCreateMatch = async (title: string, participantIds: number[]) => {
     if (!id) return;
     
+    // Filter out bot IDs (negative IDs) - only send real user IDs
+    const userIds = participantIds.filter(id => id > 0);
+    
+    if (userIds.length < 2) {
+      alert(t('match.errors.needRealUsers'));
+      return;
+    }
+    
     await matchService.createMatch({
       competitionId: Number(id),
       title,
-      participantIds,
+      participantIds: userIds,
     });
     
     const matchesData = await matchService.getMatchesByCompetition(Number(id));

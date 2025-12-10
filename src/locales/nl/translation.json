@@ -214,7 +214,8 @@
     "errors": {
       "selectTwoParticipants": "Selecteer minimaal 2 deelnemers",
       "createFailed": "Wedstrijd aanmaken mislukt",
-      "submitFailed": "Scores versturen mislukt"
+      "submitFailed": "Scores versturen mislukt",
+      "needRealUsers": "Wedstrijden vereisen minimaal 2 echte gebruikers. Bots kunnen nog geen wedstrijden spelen."
     },
     "filter": {
       "all": "Alle",
