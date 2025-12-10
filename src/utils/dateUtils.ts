@@ -4,12 +4,26 @@
  */
 
 /**
+ * Parse a date string from backend and ensure it's treated as UTC
+ * Handles both ISO 8601 with Z and without Z
+ * @param dateString Date string from backend
+ * @returns Date object
+ */
+const parseUTCDate = (dateString: string): Date => {
+  // If the string doesn't end with Z, append it to treat as UTC
+  if (!dateString.endsWith('Z') && !dateString.includes('+') && !dateString.includes('Z')) {
+    return new Date(dateString + 'Z');
+  }
+  return new Date(dateString);
+};
+
+/**
  * Format a date string to the user's local date
  * @param dateString ISO 8601 date string from backend (UTC)
  * @returns Formatted date string in user's locale
  */
 export const formatLocalDate = (dateString: string): string => {
-  const date = new Date(dateString);
+  const date = parseUTCDate(dateString);
   return date.toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
@@ -23,7 +37,7 @@ export const formatLocalDate = (dateString: string): string => {
  * @returns Formatted date and time string in user's locale
  */
 export const formatLocalDateTime = (dateString: string): string => {
-  const date = new Date(dateString);
+  const date = parseUTCDate(dateString);
   return date.toLocaleString(undefined, {
     year: 'numeric',
     month: 'short',
@@ -39,7 +53,7 @@ export const formatLocalDateTime = (dateString: string): string => {
  * @returns Formatted time string in user's locale
  */
 export const formatLocalTime = (dateString: string): string => {
-  const date = new Date(dateString);
+  const date = parseUTCDate(dateString);
   return date.toLocaleTimeString(undefined, {
     hour: '2-digit',
     minute: '2-digit'
@@ -53,7 +67,7 @@ export const formatLocalTime = (dateString: string): string => {
  * @returns Relative time string
  */
 export const getRelativeTime = (dateString: string, t: (key: string, options?: any) => string): string => {
-  const date = new Date(dateString);
+  const date = parseUTCDate(dateString);
   const now = new Date();
   const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
@@ -78,7 +92,7 @@ export const getRelativeTime = (dateString: string, t: (key: string, options?: a
  * @returns Days ago string
  */
 export const getDaysAgo = (dateString: string, t: (key: string, options?: any) => string): string => {
-  const date = new Date(dateString);
+  const date = parseUTCDate(dateString);
   const now = new Date();
   const diffTime = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
@@ -94,7 +108,7 @@ export const getDaysAgo = (dateString: string, t: (key: string, options?: any) =
  * @returns true if date is today in user's timezone
  */
 export const isToday = (dateString: string): boolean => {
-  const date = new Date(dateString);
+  const date = parseUTCDate(dateString);
   const now = new Date();
   return date.toDateString() === now.toDateString();
 };
@@ -106,7 +120,7 @@ export const isToday = (dateString: string): boolean => {
  * @returns true if date is within the last N days
  */
 export const isWithinLastDays = (dateString: string, days: number): boolean => {
-  const date = new Date(dateString);
+  const date = parseUTCDate(dateString);
   const now = new Date();
   const diffTime = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
