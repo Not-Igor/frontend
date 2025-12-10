@@ -215,7 +215,7 @@
       "selectTwoParticipants": "Selecteer minimaal 2 deelnemers",
       "createFailed": "Wedstrijd aanmaken mislukt",
       "submitFailed": "Scores versturen mislukt",
-      "needRealUsers": "Wedstrijden vereisen minimaal 2 echte gebruikers. Bots kunnen nog geen wedstrijden spelen."
+      "needAtLeastOneUser": "Minimaal één echte gebruiker is vereist om een wedstrijd aan te maken"
     },
     "filter": {
       "all": "Alle",

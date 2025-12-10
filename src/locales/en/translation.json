@@ -214,7 +214,8 @@
     "errors": {
       "selectTwoParticipants": "Please select at least 2 participants",
       "createFailed": "Failed to create match",
-      "submitFailed": "Failed to submit scores"
+      "submitFailed": "Failed to submit scores",
+      "needAtLeastOneUser": "At least one real user is required to create a match"
     },
     "filter": {
       "all": "All",
