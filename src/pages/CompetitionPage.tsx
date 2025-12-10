@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import authService from '../services/authService';
-import competitionService, { CompetitionDto, ParticipantDto } from '../services/competitionService';
+import competitionService, { CompetitionDto, ParticipantDto, CompetitionParticipantDto } from '../services/competitionService';
 import matchService, { MatchDto } from '../services/matchService';
 import CreateMatchModal from '../components/CreateMatchModal';
 import MatchDetailsModal from '../components/MatchDetailsModal';
@@ -19,6 +19,7 @@ const CompetitionPage: React.FC = () => {
   const { t } = useTranslation();
   const [competition, setCompetition] = useState<CompetitionDto | null>(null);
   const [participants, setParticipants] = useState<ParticipantDto[]>([]);
+  const [selectableParticipants, setSelectableParticipants] = useState<CompetitionParticipantDto[]>([]);
   const [matches, setMatches] = useState<MatchDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
@@ -54,6 +55,9 @@ const CompetitionPage: React.FC = () => {
       
       const participantsData = await competitionService.getParticipants(Number(id));
       setParticipants(participantsData);
+
+      const selectableParticipantsData = await competitionService.getSelectableParticipants(Number(id));
+      setSelectableParticipants(selectableParticipantsData);
 
       const matchesData = await matchService.getMatchesByCompetition(Number(id));
       setMatches(matchesData);
@@ -382,7 +386,14 @@ const CompetitionPage: React.FC = () => {
                           </div>
                         )}
                       </div>
-                      <span className="font-medium text-gray-900">{participant.username}</span>
+                      <div className="flex items-center space-x-2">
+                        <span className="font-medium text-gray-900">{participant.username}</span>
+                        {participant.isBot && (
+                          <span className="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-semibold">
+                            🤖
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <span className="text-2xl font-bold text-indigo-600">{participant.wins}</span>
                   </div>
@@ -439,7 +450,14 @@ const CompetitionPage: React.FC = () => {
                                 alt={participant.username}
                                 className="w-8 h-8 rounded-full"
                               />
-                              <span className="font-medium text-gray-900">{participant.username}</span>
+                              <div className="flex items-center space-x-2">
+                                <span className="font-medium text-gray-900">{participant.username}</span>
+                                {participant.isBot && (
+                                  <span className="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-semibold">
+                                    🤖
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           </td>
                           <td className="py-3 px-3 text-center text-gray-700">{participant.matchesPlayed}</td>
@@ -611,7 +629,7 @@ const CompetitionPage: React.FC = () => {
         isOpen={isCreateMatchModalOpen}
         onClose={() => setIsCreateMatchModalOpen(false)}
         onCreateMatch={handleCreateMatch}
-        participants={participants}
+        participants={selectableParticipants}
         matchNumber={matches.length + 1}
       />
 

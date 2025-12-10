@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ParticipantDto } from '../services/competitionService';
+import { CompetitionParticipantDto } from '../services/competitionService';
 
 interface CreateMatchModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCreateMatch: (title: string, participantIds: number[]) => Promise<void>;
-  participants: ParticipantDto[];
+  participants: CompetitionParticipantDto[];
   matchNumber: number;
 }
 
@@ -122,7 +122,14 @@ const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
                       alt={participant.username}
                       className="w-10 h-10 rounded-full"
                     />
-                    <span className="font-medium text-gray-900">{participant.username}</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="font-medium text-gray-900">{participant.username}</span>
+                      {participant.isBot && (
+                        <span className="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-semibold">
+                          🤖 Bot
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="flex items-center">
                     {selectedParticipants.has(participant.id) && (

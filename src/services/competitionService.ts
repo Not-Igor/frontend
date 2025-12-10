@@ -31,6 +31,13 @@ export interface ParticipantDto {
   draws: number;
   losses: number;
   pointsScored: number;
+  isBot?: boolean;
+}
+
+export interface CompetitionParticipantDto {
+  id: number;
+  username: string;
+  isBot: boolean;
 }
 
 class CompetitionService {
@@ -52,6 +59,10 @@ class CompetitionService {
 
   async getParticipants(competitionId: number): Promise<ParticipantDto[]> {
     return await apiService.get<ParticipantDto[]>(`/competitions/${competitionId}/participants`);
+  }
+
+  async getSelectableParticipants(competitionId: number): Promise<CompetitionParticipantDto[]> {
+    return await apiService.get<CompetitionParticipantDto[]>(`/competitions/${competitionId}/selectable-participants`);
   }
 
   async deleteCompetition(competitionId: number): Promise<void> {
