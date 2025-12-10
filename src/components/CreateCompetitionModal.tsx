@@ -36,11 +36,7 @@ const CreateCompetitionModal: React.FC<CreateCompetitionModalProps> = ({
       return;
     }
 
-    if (selectedUserIds.length === 0) {
-      setError(t('competition.errors.selectParticipant'));
-      return;
-    }
-
+    // Allow solo competitions - no participants required
     onCreate(title.trim(), selectedEmoji, selectedUserIds);
     
     // Reset form
