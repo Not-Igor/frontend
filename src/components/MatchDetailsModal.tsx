@@ -65,7 +65,8 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
   };
 
   const currentUser = authService.getCurrentUser();
-  const isParticipant = match?.participants.some(p => p.id === currentUser?.id);
+  // Allow any logged-in user to edit scores (backend will validate competition participation)
+  const isParticipant = !!currentUser;
   const canEditScores = isParticipant && (match?.status === MatchStatus.IN_PROGRESS || (match?.status === MatchStatus.COMPLETED && isEditing));
 
   if (!isOpen || !match) return null;
