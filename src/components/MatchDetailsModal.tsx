@@ -118,7 +118,14 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                         className="w-12 h-12 rounded-full"
                       />
                       <div>
-                        <p className="font-medium text-gray-900">{participant.username}</p>
+                        <div className="flex items-center space-x-2">
+                          <p className="font-medium text-gray-900">{participant.username}</p>
+                          {participant.isBot && (
+                            <span className="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-semibold">
+                              🤖
+                            </span>
+                          )}
+                        </div>
                         {isConfirmed && (
                           <p className="text-xs text-green-600 flex items-center">
                             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">

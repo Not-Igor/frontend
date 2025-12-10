@@ -11,6 +11,7 @@ export interface UserDto {
   username: string;
   email: string | null;
   role: string;
+  isBot?: boolean;
 }
 
 export interface CompetitionDto {
