@@ -80,11 +80,28 @@ const ManageBotsModal: React.FC<ManageBotsModalProps> = ({
     setError('');
 
     try {
+      // If no bots selected or no changes, just close
+      if (botCount === 0) {
+        onClose();
+        return;
+      }
+
       // Validate that all names are filled for the selected count
       const selectedNames = botNames.slice(0, botCount);
       if (selectedNames.some(name => !name.trim())) {
         setError(t('bots.errors.emptyNames'));
         setLoading(false);
+        return;
+      }
+
+      // Check if bots already exist with same names (no changes)
+      const existingNames = existingBots.slice(0, botCount).map(bot => bot.username);
+      const hasChanges = botCount !== existingBots.length || 
+                         selectedNames.some((name, idx) => name !== existingNames[idx]);
+      
+      if (!hasChanges) {
+        // No changes, just close
+        onClose();
         return;
       }
 
