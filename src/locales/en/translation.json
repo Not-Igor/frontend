@@ -289,5 +289,19 @@
     "pending": "Pending...",
     "cancelling": "Cancelling...",
     "cancel": "Cancel"
+  },
+  "bots": {
+    "title": "Manage Bots",
+    "description": "Add AI bots to play in this competition",
+    "countLabel": "Number of Bots",
+    "maxBots": "Maximum {{max}} bots",
+    "namesBots": "Name Your Bots",
+    "botNumber": "Bot {{number}}",
+    "namePlaceholder": "Enter bot name...",
+    "noBotsInfo": "Select the number of bots using the arrows above",
+    "errors": {
+      "emptyNames": "Please fill in all bot names",
+      "saveFailed": "Failed to save bots. Please try again."
+    }
   }
 }

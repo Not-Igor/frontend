@@ -289,5 +289,19 @@
     "pending": "In behandeling...",
     "cancelling": "Annuleren...",
     "cancel": "Annuleren"
+  },
+  "bots": {
+    "title": "Bots Beheren",
+    "description": "Voeg AI bots toe om mee te spelen in deze competitie",
+    "countLabel": "Aantal Bots",
+    "maxBots": "Maximaal {{max}} bots",
+    "namesBots": "Geef je Bots een Naam",
+    "botNumber": "Bot {{number}}",
+    "namePlaceholder": "Voer bot naam in...",
+    "noBotsInfo": "Selecteer het aantal bots met de pijltjes hierboven",
+    "errors": {
+      "emptyNames": "Vul alle bot namen in",
+      "saveFailed": "Bots opslaan mislukt. Probeer het opnieuw."
+    }
   }
 }
