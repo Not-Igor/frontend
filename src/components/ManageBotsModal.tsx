@@ -96,7 +96,7 @@ const ManageBotsModal: React.FC<ManageBotsModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6 rounded-t-xl">
+        <div className="sticky top-0 bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6 rounded-t-xl z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
@@ -215,7 +215,7 @@ const ManageBotsModal: React.FC<ManageBotsModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-gray-50 px-6 py-4 rounded-b-xl border-t-2 border-gray-200 flex justify-end space-x-3">
+        <div className="sticky bottom-0 bg-gray-50 px-6 py-4 rounded-b-xl border-t-2 border-gray-200 flex justify-end space-x-3 z-10">
           <button
             onClick={onClose}
             disabled={loading}
