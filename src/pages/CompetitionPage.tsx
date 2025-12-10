@@ -72,11 +72,9 @@ const CompetitionPage: React.FC = () => {
   const handleCreateMatch = async (title: string, participantIds: number[]) => {
     if (!id) return;
     
-    // Count real users (positive IDs)
-    const userIds = participantIds.filter(id => id > 0);
-    
-    if (userIds.length < 1) {
-      alert(t('match.errors.needAtLeastOneUser'));
+    // Allow bot-only matches - no minimum user requirement
+    if (participantIds.length < 2) {
+      alert(t('match.errors.selectTwoParticipants'));
       return;
     }
     
