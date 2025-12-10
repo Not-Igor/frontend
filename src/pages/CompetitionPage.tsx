@@ -101,6 +101,7 @@ const CompetitionPage: React.FC = () => {
   const handleSubmitScores = async (scores: Record<number, number>) => {
     if (!selectedMatch) return;
     
+    // Send all scores - backend will filter out bot scores automatically
     await matchService.submitScores(selectedMatch.id, scores);
     
     if (!id) return;
