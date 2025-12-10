@@ -12,6 +12,12 @@ export interface FriendRequest {
   senderUsername: string;
 }
 
+export interface FriendSuggestion {
+  id: number;
+  username: string;
+  mutualFriendsCount: number;
+}
+
 const friendService = {
   searchUser: async (username: string): Promise<UserSearchResult[]> => {
     const token = localStorage.getItem('token');
@@ -137,6 +143,23 @@ const friendService = {
       const errorText = await response.text();
       throw new Error(errorText || 'Failed to cancel friend request');
     }
+  },
+
+  getFriendSuggestions: async (userId: number, limit: number = 10): Promise<FriendSuggestion[]> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/friends/suggestions/${userId}?limit=${limit}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch friend suggestions');
+    }
+
+    return response.json();
   },
 };
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FriendRequest } from '../services/friendService';
 
 interface SentFriendRequestListProps {
@@ -12,6 +13,7 @@ const SentFriendRequestList: React.FC<SentFriendRequestListProps> = ({
   onCancel,
   isCancelling,
 }) => {
+  const { t } = useTranslation();
   const getAvatarUrl = (username: string) => {
     return `https://api.dicebear.com/7.x/pixel-art/svg?seed=${username}`;
   };
@@ -19,7 +21,7 @@ const SentFriendRequestList: React.FC<SentFriendRequestListProps> = ({
   if (requests.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
-        <p>No pending friend requests sent</p>
+        <p>{t('sentRequests.noPendingRequests')}</p>
       </div>
     );
   }
@@ -39,7 +41,7 @@ const SentFriendRequestList: React.FC<SentFriendRequestListProps> = ({
             />
             <div>
               <p className="font-medium text-gray-900">{request.senderUsername}</p>
-              <p className="text-sm text-gray-500">Pending...</p>
+              <p className="text-sm text-gray-500">{t('sentRequests.pending')}</p>
             </div>
           </div>
           <button
@@ -47,7 +49,7 @@ const SentFriendRequestList: React.FC<SentFriendRequestListProps> = ({
             disabled={isCancelling}
             className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isCancelling ? 'Cancelling...' : 'Cancel'}
+            {isCancelling ? t('sentRequests.cancelling') : t('sentRequests.cancel')}
           </button>
         </div>
       ))}

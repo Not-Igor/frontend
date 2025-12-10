@@ -59,6 +59,10 @@
   },
   "friends": {
     "title": "Vrienden",
+    "tabs": {
+      "friends": "Vrienden",
+      "addFriends": "Vrienden Toevoegen"
+    },
     "myFriends": "Mijn Vrienden",
     "friendsCount": "{{count}} vriend",
     "friendsCount_plural": "{{count}} vrienden",
@@ -70,6 +74,13 @@
     "noResults": "Geen gebruikers gevonden",
     "sendRequest": "Stuur Vriendschapsverzoek",
     "requestSent": "Vriendschapsverzoek verzonden!",
+    "requestSentSuccess": "Vriendschapsverzoek succesvol verzonden!",
+    "requestAccepted": "Vriendschapsverzoek geaccepteerd!",
+    "requestRejected": "Vriendschapsverzoek geweigerd",
+    "requestCancelled": "Vriendschapsverzoek geannuleerd",
+    "pendingRequestExists": "Je hebt al een openstaand vriendschapsverzoek met deze gebruiker",
+    "couldNotSendRequest": "Kon vriendschapsverzoek niet versturen",
+    "couldNotCancelRequest": "Kon vriendschapsverzoek niet annuleren",
     "wantsToBeFriends": "wil vrienden worden",
     "friend": "Vriend",
     "errors": {
@@ -80,6 +91,7 @@
       "pending": "Openstaande Verzoeken",
       "accept": "Accepteren",
       "reject": "Weigeren",
+      "cancel": "Annuleren",
       "noRequests": "Geen openstaande verzoeken",
       "noPendingRequests": "Geen openstaande vriendschapsverzoeken"
     },
@@ -88,6 +100,17 @@
       "emptyMessage": "Je hebt nog geen vrienden toegevoegd",
       "emptyHint": "Zoek gebruikers en stuur vriendschapsverzoeken!",
       "loading": "Vrienden laden..."
+    },
+    "suggestions": {
+      "title": "Vrienden Suggesties",
+      "peopleYouMayKnow": "Mensen Die Je Misschien Kent",
+      "mutualFriend": "1 gemeenschappelijke vriend",
+      "mutualFriends": "{{count}} gemeenschappelijke vrienden",
+      "add": "Toevoegen",
+      "loadMore": "Meer Laden (+5)",
+      "noSuggestions": "Geen vrienden suggesties beschikbaar",
+      "noSuggestionsHint": "Voeg meer vrienden toe om gepersonaliseerde suggesties te krijgen",
+      "loading": "Suggesties laden..."
     }
   },
   "home": {
@@ -250,5 +273,21 @@
     "ascending": "Oplopend",
     "descending": "Aflopend",
     "reset": "Filters resetten"
+  },
+  "notifications": {
+    "title": "Meldingen",
+    "markAllRead": "Alles als gelezen markeren",
+    "noNotifications": "Geen nieuwe meldingen",
+    "justNow": "zojuist",
+    "minutesAgo": "{{count}}m geleden",
+    "hoursAgo": "{{count}}u geleden",
+    "daysAgo": "{{count}}d geleden"
+  },
+  "sentRequests": {
+    "title": "Verzonden Verzoeken",
+    "noPendingRequests": "Geen openstaande vriendschapsverzoeken verzonden",
+    "pending": "In behandeling...",
+    "cancelling": "Annuleren...",
+    "cancel": "Annuleren"
   }
 }

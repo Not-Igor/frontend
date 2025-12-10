@@ -5,12 +5,12 @@ import Toast from './Toast';
 interface ToastMessage {
   id: string;
   message: string;
-  type: 'success' | 'error' | 'info';
+  type: 'success' | 'error' | 'info' | 'warning';
   duration?: number;
 }
 
 interface ToastContextType {
-  addToast: (message: string, type?: 'success' | 'error' | 'info', duration?: number) => void;
+  addToast: (message: string, type?: 'success' | 'error' | 'info' | 'warning', duration?: number) => void;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
@@ -18,7 +18,7 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  const addToast = useCallback((message: string, type: 'success' | 'error' | 'info' = 'info', duration?: number) => {
+  const addToast = useCallback((message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info', duration?: number) => {
     const id = uuidv4();
     setToasts((prevToasts) => [...prevToasts, { id, message, type, duration }]);
   }, []);

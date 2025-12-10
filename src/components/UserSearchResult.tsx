@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { UserSearchResult as UserSearchResultType } from '../services/friendService';
 
 interface UserSearchResultProps {
@@ -8,6 +9,7 @@ interface UserSearchResultProps {
 }
 
 const UserSearchResult: React.FC<UserSearchResultProps> = ({ user, onSendRequest, isSending }) => {
+  const { t } = useTranslation();
   const avatarUrl = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${user.username}`;
 
   return (
@@ -28,7 +30,7 @@ const UserSearchResult: React.FC<UserSearchResultProps> = ({ user, onSendRequest
           onClick={() => onSendRequest(user.username)}
           disabled={isSending}
           className="flex-shrink-0 p-3 sm:px-6 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
-          title={isSending ? 'Verzenden...' : 'Vriendschapsverzoek sturen'}
+          title={isSending ? t('friends.searching') : t('friends.sendRequest')}
         >
           {/* Mobile: Icon only */}
           <span className="sm:hidden">
@@ -45,7 +47,7 @@ const UserSearchResult: React.FC<UserSearchResultProps> = ({ user, onSendRequest
           </span>
           {/* Desktop: Full text */}
           <span className="hidden sm:inline">
-            {isSending ? 'Verzenden...' : 'Vriendschapsverzoek sturen'}
+            {isSending ? t('friends.searching') : t('friends.sendRequest')}
           </span>
         </button>
       </div>

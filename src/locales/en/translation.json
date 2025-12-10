@@ -59,6 +59,10 @@
   },
   "friends": {
     "title": "Friends",
+    "tabs": {
+      "friends": "Friends",
+      "addFriends": "Add Friends"
+    },
     "myFriends": "My Friends",
     "friendsCount": "{{count}} friend",
     "friendsCount_plural": "{{count}} friends",
@@ -70,6 +74,13 @@
     "noResults": "No users found",
     "sendRequest": "Send Friend Request",
     "requestSent": "Friend request sent!",
+    "requestSentSuccess": "Friend request sent successfully!",
+    "requestAccepted": "Friend request accepted!",
+    "requestRejected": "Friend request rejected",
+    "requestCancelled": "Friend request cancelled",
+    "pendingRequestExists": "You already have a pending friend request with this user",
+    "couldNotSendRequest": "Could not send friend request",
+    "couldNotCancelRequest": "Could not cancel friend request",
     "wantsToBeFriends": "wants to be friends",
     "friend": "Friend",
     "errors": {
@@ -80,6 +91,7 @@
       "pending": "Pending Requests",
       "accept": "Accept",
       "reject": "Reject",
+      "cancel": "Cancel",
       "noRequests": "No pending requests",
       "noPendingRequests": "No pending friend requests"
     },
@@ -88,6 +100,17 @@
       "emptyMessage": "You haven't added any friends yet",
       "emptyHint": "Search for users and send friend requests!",
       "loading": "Loading friends..."
+    },
+    "suggestions": {
+      "title": "Suggested Friends",
+      "peopleYouMayKnow": "People You May Know",
+      "mutualFriend": "1 mutual friend",
+      "mutualFriends": "{{count}} mutual friends",
+      "add": "Add",
+      "loadMore": "Load More (+5)",
+      "noSuggestions": "No friend suggestions available",
+      "noSuggestionsHint": "Add more friends to get personalized suggestions",
+      "loading": "Loading suggestions..."
     }
   },
   "home": {
@@ -250,5 +273,21 @@
     "ascending": "Ascending",
     "descending": "Descending",
     "reset": "Reset Filters"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "noNotifications": "No new notifications",
+    "justNow": "just now",
+    "minutesAgo": "{{count}}m ago",
+    "hoursAgo": "{{count}}h ago",
+    "daysAgo": "{{count}}d ago"
+  },
+  "sentRequests": {
+    "title": "Sent Requests",
+    "noPendingRequests": "No pending friend requests sent",
+    "pending": "Pending...",
+    "cancelling": "Cancelling...",
+    "cancel": "Cancel"
   }
 }

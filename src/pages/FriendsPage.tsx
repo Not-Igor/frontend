@@ -7,8 +7,10 @@ import UserSearchDropdown from '../components/UserSearchDropdown';
 import FriendRequestList from '../components/FriendRequestList';
 import SentFriendRequestList from '../components/SentFriendRequestList';
 import FriendsList from '../components/FriendsList';
+import FriendSuggestions from '../components/FriendSuggestions';
+import { useToast } from '../components/Toast/ToastProvider';
 import authService from '../services/authService';
-import friendService, { UserSearchResult as UserSearchResultType, FriendRequest } from '../services/friendService';
+import friendService, { UserSearchResult as UserSearchResultType, FriendRequest, FriendSuggestion } from '../services/friendService';
 import { friendRequestEvents, FRIEND_REQUEST_UPDATED } from '../utils/events';
 
 interface Friend {
@@ -19,7 +21,9 @@ interface Friend {
 const FriendsPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { addToast } = useToast();
   const searchContainerRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState<'friends' | 'addFriends'>('friends');
   const [searchResults, setSearchResults] = useState<UserSearchResultType[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserSearchResultType | null>(null);
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
@@ -30,10 +34,11 @@ const FriendsPage: React.FC = () => {
   const [isResponding, setIsResponding] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const [isLoadingFriends, setIsLoadingFriends] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [friendSuggestions, setFriendSuggestions] = useState<FriendSuggestion[]>([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const [suggestionsLimit, setSuggestionsLimit] = useState(5);
 
   useEffect(() => {
     if (!authService.isAuthenticated()) {
@@ -43,6 +48,7 @@ const FriendsPage: React.FC = () => {
     loadFriendRequests();
     loadSentRequests();
     loadFriends();
+    loadFriendSuggestions(5);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
@@ -82,6 +88,21 @@ const FriendsPage: React.FC = () => {
       console.error('Failed to load friends:', err);
     } finally {
       setIsLoadingFriends(false);
+    }
+  };
+
+  const loadFriendSuggestions = async (limit: number = 5) => {
+    const user = authService.getUser();
+    if (!user) return;
+    
+    setIsLoadingSuggestions(true);
+    try {
+      const suggestions = await friendService.getFriendSuggestions(user.id, limit);
+      setFriendSuggestions(suggestions);
+    } catch (err) {
+      console.error('Failed to load friend suggestions:', err);
+    } finally {
+      setIsLoadingSuggestions(false);
     }
   };
 
@@ -150,17 +171,23 @@ const FriendsPage: React.FC = () => {
     if (!user) return;
 
     setIsSending(true);
-    setError(null);
-    setSuccessMessage(null);
 
     try {
       await friendService.sendFriendRequest(user.id, receiverUsername);
-      setSuccessMessage('Vriendschapsverzoek succesvol verzonden!');
+      addToast('Vriendschapsverzoek succesvol verzonden!', 'success');
       setSelectedUser(null);
-      // Reload sent requests to show the new request
+      // Reload sent requests and suggestions
       await loadSentRequests();
+      await loadFriendSuggestions(suggestionsLimit);
     } catch (err: any) {
-      setError(err.message || 'Kon vriendschapsverzoek niet verzenden');
+      const errorMessage = err.message || 'Kon vriendschapsverzoek niet verzenden';
+      
+      // Check if it's a pending request error
+      if (errorMessage.includes('pending') || errorMessage.includes('already')) {
+        addToast('Je hebt al een pending vriendschapsverzoek met deze gebruiker', 'warning');
+      } else {
+        addToast(errorMessage, 'error');
+      }
     } finally {
       setIsSending(false);
     }
@@ -168,21 +195,23 @@ const FriendsPage: React.FC = () => {
 
   const handleRespondToRequest = async (requestId: number, accepted: boolean) => {
     setIsResponding(true);
-    setError(null);
-    setSuccessMessage(null);
 
     try {
       await friendService.respondToRequest(requestId, accepted);
-      setSuccessMessage(accepted ? 'Vriendschapsverzoek geaccepteerd!' : 'Vriendschapsverzoek geweigerd');
+      addToast(
+        accepted ? 'Vriendschapsverzoek geaccepteerd!' : 'Vriendschapsverzoek geweigerd',
+        accepted ? 'success' : 'info'
+      );
       await loadFriendRequests();
-      // Reload friends list if accepted
+      // Reload friends list and suggestions if accepted
       if (accepted) {
         await loadFriends();
+        await loadFriendSuggestions(suggestionsLimit);
       }
       // Notify navbar to update badge count
       friendRequestEvents.emit(FRIEND_REQUEST_UPDATED);
     } catch (err: any) {
-      setError(err.message || t('friends.errors.respondToRequest'));
+      addToast(err.message || t('friends.errors.respondToRequest'), 'error');
     } finally {
       setIsResponding(false);
     }
@@ -196,87 +225,134 @@ const FriendsPage: React.FC = () => {
     try {
       await friendService.cancelFriendRequest(requestId, user.id);
       await loadSentRequests();
-      setSuccessMessage('Vriendschapsverzoek geannuleerd');
-      setTimeout(() => setSuccessMessage(null), 3000);
+      addToast('Vriendschapsverzoek geannuleerd', 'info');
     } catch (err: any) {
-      setError(err.message || 'Kon vriendschapsverzoek niet annuleren');
-      setTimeout(() => setError(null), 3000);
+      addToast(err.message || 'Kon vriendschapsverzoek niet annuleren', 'error');
     } finally {
       setIsCancelling(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="min-h-[calc(100vh-4rem)] bg-gray-50 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-8">{t('friends.title')}</h1>
 
-        {/* Error and Success Messages */}
-        {error && (
-          <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-            {error}
-          </div>
-        )}
-        {successMessage && (
-          <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-            {successMessage}
-          </div>
-        )}
-
-        {/* Friends List Section */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('friends.myFriends')}</h2>
-          <FriendsList friends={friends} isLoading={isLoadingFriends} />
+        {/* Tabs */}
+        <div className="mb-6 border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8">
+            <button
+              onClick={() => setActiveTab('friends')}
+              className={`${
+                activeTab === 'friends'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+            >
+              Friends
+            </button>
+            <button
+              onClick={() => setActiveTab('addFriends')}
+              className={`${
+                activeTab === 'addFriends'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+            >
+              Add Friends
+              {(friendRequests.length > 0 || sentRequests.length > 0) && (
+                <span className="ml-2 bg-blue-100 text-blue-600 py-0.5 px-2 rounded-full text-xs font-medium">
+                  {friendRequests.length + sentRequests.length}
+                </span>
+              )}
+            </button>
+          </nav>
         </div>
 
-        {/* Search Section */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('friends.searchUsers')}</h2>
-          <div ref={searchContainerRef} className="relative">
-            <UserSearchBar 
-              onSearch={handleSearch} 
-              onSearchTermChange={handleSearchTermChange}
-              isLoading={isSearching} 
-            />
-            <UserSearchDropdown 
-              users={searchResults} 
-              onSelectUser={handleSelectUser}
-              searchError={searchTerm.trim().length >= 2 ? searchError : null}
-            />
-          </div>
-          
-          {selectedUser && (
-            <UserSearchResult
-              user={selectedUser}
-              onSendRequest={handleSendRequest}
-              isSending={isSending}
-            />
-          )}
-        </div>
-
-        {/* Friend Requests Section */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            {t('friends.requests.title')} ({friendRequests.length})
-          </h2>
-          <FriendRequestList
-            requests={friendRequests}
-            onRespond={handleRespondToRequest}
-            isResponding={isResponding}
-          />
-        </div>
-
-        {/* Sent Requests Section */}
-        {sentRequests.length > 0 && (
+        {/* Friends Tab Content */}
+        {activeTab === 'friends' && (
           <div>
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-              Pending Requests ({sentRequests.length})
-            </h2>
-            <SentFriendRequestList
-              requests={sentRequests}
-              onCancel={handleCancelRequest}
-              isCancelling={isCancelling}
-            />
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('friends.myFriends')}</h2>
+            <FriendsList friends={friends} isLoading={isLoadingFriends} />
+            
+            {/* Friend Suggestions Section */}
+            {friends.length > 0 && (
+              <div className="mt-8">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">Suggested Friends</h2>
+                <FriendSuggestions
+                  suggestions={friendSuggestions}
+                  onSendRequest={handleSendRequest}
+                  isSending={isSending}
+                  isLoading={isLoadingSuggestions}
+                  onLoadMore={() => {
+                    const newLimit = suggestionsLimit + 5;
+                    setSuggestionsLimit(newLimit);
+                    loadFriendSuggestions(newLimit);
+                  }}
+                  hasMore={friendSuggestions.length >= suggestionsLimit}
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Add Friends Tab Content */}
+        {activeTab === 'addFriends' && (
+          <div>
+            {/* Search Section */}
+            <div className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('friends.searchUsers')}</h2>
+              <div ref={searchContainerRef} className="relative">
+                <UserSearchBar 
+                  onSearch={handleSearch} 
+                  onSearchTermChange={handleSearchTermChange}
+                  isLoading={isSearching} 
+                />
+                <UserSearchDropdown 
+                  users={searchResults} 
+                  onSelectUser={handleSelectUser}
+                  searchError={searchTerm.trim().length >= 2 ? searchError : null}
+                />
+              </div>
+              
+              {selectedUser && (
+                <UserSearchResult
+                  user={selectedUser}
+                  onSendRequest={handleSendRequest}
+                  isSending={isSending}
+                />
+              )}
+            </div>
+
+            {/* Friend Requests Section */}
+            <div className="mb-6">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                {t('friends.requests.title')} ({friendRequests.length})
+              </h2>
+              <div className="max-h-[40vh] overflow-y-auto">
+                <FriendRequestList
+                  requests={friendRequests}
+                  onRespond={handleRespondToRequest}
+                  isResponding={isResponding}
+                />
+              </div>
+            </div>
+
+            {/* Sent Requests Section */}
+            {sentRequests.length > 0 && (
+              <div>
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                  Pending Requests ({sentRequests.length})
+                </h2>
+                <div className="max-h-[40vh] overflow-y-auto">
+                  <SentFriendRequestList
+                    requests={sentRequests}
+                    onCancel={handleCancelRequest}
+                    isCancelling={isCancelling}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
